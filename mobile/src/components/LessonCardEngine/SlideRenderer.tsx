@@ -61,6 +61,108 @@ function useShake(trigger: boolean) {
 
 // ── HTML Animated Slide Component ──────────────────────────────────────────────
 function HtmlSlide({ html }: { html: string }) {
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+
+    const timer = setTimeout(() => {
+      const wrapper = containerRef.current?.querySelector('.slide-html-wrapper') || document.querySelector('.slide-html-wrapper');
+      if (!wrapper) return;
+
+      const buttons = wrapper.querySelectorAll('button, .opt, [role="button"]');
+      buttons.forEach((btn) => {
+        const el = btn as HTMLElement;
+        el.style.pointerEvents = 'auto';
+        el.style.cursor = 'pointer';
+        el.removeAttribute('disabled');
+
+        if (el.getAttribute('data-keep-bound') === 'true') return;
+        el.setAttribute('data-keep-bound', 'true');
+
+        const handleAction = (e: Event) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const btnText = (el.textContent || '').toLowerCase().trim();
+
+          // 1. Next / Continue / Audit / Risk Buttons -> Navigate to next slide immediately
+          if (
+            el.classList.contains('i-3') ||
+            el.classList.contains('seq3') ||
+            el.classList.contains('seq4') ||
+            btnText.includes('next') ||
+            btnText.includes('continue') ||
+            btnText.includes('analyze') ||
+            btnText.includes('audit') ||
+            btnText.includes('risk') ||
+            btnText.includes('let\'s find out') ||
+            btnText.includes('build defensive') ||
+            btnText.includes('patch the firewall') ||
+            btnText.includes('optimize my tranches')
+          ) {
+            window.dispatchEvent(new CustomEvent('keep-navigate-next'));
+            return;
+          }
+
+          // 2. Choice Option Buttons
+          const isChoiceBtn = (
+            el.classList.contains('opt') ||
+            btnText === 'yes' ||
+            btnText === 'no' ||
+            btnText.includes('yes,') ||
+            btnText.includes('no,') ||
+            btnText.includes('have one') ||
+            btnText.includes('pocket money') ||
+            btnText.includes('no income')
+          );
+
+          if (isChoiceBtn) {
+            const parent = el.parentNode;
+            if (parent) {
+              const siblings = parent.querySelectorAll('button, .opt');
+              siblings.forEach((s) => {
+                const sel = s as HTMLElement;
+                sel.style.opacity = '0.5';
+                sel.style.border = '1.5px solid var(--border, #E5E4DE)';
+                sel.style.background = 'var(--surface-1, #F5F5F3)';
+                sel.style.color = 'var(--text-secondary, #5F5E5A)';
+                sel.style.fontWeight = '500';
+              });
+            }
+
+            el.style.opacity = '1';
+            el.style.border = '2px solid var(--text-accent, #0C447C)';
+            el.style.background = 'var(--bg-accent, #E6F1FB)';
+            el.style.color = 'var(--text-accent, #0C447C)';
+            el.style.fontWeight = '700';
+
+            if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
+            const slideText = (wrapper.textContent || '').toLowerCase();
+            const answerVal = btnText.includes('yes') ? 'Yes' : 'No';
+            if (slideText.includes('health insurance') || slideText.includes('separate from your employer')) {
+              (window as any).__KEEP_STATE__.corporateLeashAnswer = answerVal;
+            } else if (slideText.includes('term life') || slideText.includes('cheapest for your age')) {
+              (window as any).__KEEP_STATE__.earlyLockAnswer = answerVal;
+            }
+
+            const continueBtn = wrapper.querySelector('.i-3') || wrapper.querySelector('button.i-3');
+            if (continueBtn) {
+              (continueBtn as HTMLElement).style.opacity = '1';
+              (continueBtn as HTMLElement).style.pointerEvents = 'auto';
+              (continueBtn as HTMLElement).style.cursor = 'pointer';
+            }
+          }
+        };
+
+        el.addEventListener('click', handleAction);
+        el.addEventListener('touchend', handleAction);
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [html]);
+
   if (Platform.OS === 'web') {
     const tablerIconsCdn = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">`;
 
@@ -103,7 +205,6 @@ function HtmlSlide({ html }: { html: string }) {
         @keyframes strike { 0% { width:0%; } 100% { width:100%; } }
         @keyframes popIn { 0% { opacity:0; transform:scale(0.8) translateY(6px); } 100% { opacity:1; transform:scale(1) translateY(0); } }
 
-        /* ── Screen-reader-only text: hide visually ── */
         .sr-only {
           position: absolute !important;
           width: 1px !important;
@@ -127,425 +228,17 @@ function HtmlSlide({ html }: { html: string }) {
           background: transparent;
           padding: 0;
           overflow-y: auto;
-          font-family: var(--font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-        }
-
-        /* Phone container leftovers — make them fill the screen */
-        .slide-html-wrapper .phone-cleaned {
-          width: 100% !important;
-          max-width: 100% !important;
-          height: 100% !important;
-          border-radius: 0 !important;
-          border: none !important;
-          box-shadow: none !important;
-          margin: 0 !important;
-          padding: 0 !important;
-        }
-
-        /* Index fund card containers — remove fixed sizing */
-        .slide-html-wrapper > div[style*="justify-content:center"][style*="padding:1rem"] {
-          width: 100% !important;
-          padding: 0 !important;
-          display: flex !important;
-          flex-direction: column !important;
-          flex: 1 !important;
-        }
-        .slide-html-wrapper > div[style*="justify-content:center"] > div[style*="border-radius:28px"],
-        .slide-html-wrapper > div[style*="justify-content:center"] > div[style*="border-radius: 28px"] {
-          width: 100% !important;
-          height: 100% !important;
-          max-width: 100% !important;
-          border-radius: 0 !important;
-          border: none !important;
-          box-shadow: none !important;
-          padding: 24px 20px !important;
-          flex: 1 !important;
-        }
-
-        /* Any remaining fixed-width cards */
-        .slide-html-wrapper > div > div[style*="width:280px"],
-        .slide-html-wrapper > div > div[style*="width:270px"],
-        .slide-html-wrapper > div > div[style*="width: 280px"],
-        .slide-html-wrapper > div > div[style*="width: 270px"],
-        .slide-html-wrapper > div[style*="width:280px"],
-        .slide-html-wrapper > div[style*="width:270px"] {
-          width: 100% !important;
-          max-width: 100% !important;
-        }
-
-        /* ── Editable input field injected by JS ── */
-        .keep-editable-field {
-          outline: none;
-          border: none;
-          background: transparent;
-          font-size: inherit;
-          font-weight: inherit;
-          font-family: inherit;
-          color: inherit;
-          width: 100%;
-          min-width: 60px;
-          text-align: inherit;
-          caret-color: var(--text-accent);
-        }
-        .keep-editable-field:focus {
-          outline: none;
-        }
-        .keep-input-wrapper {
-          display: flex;
-          align-items: center;
-          border: 1.5px solid var(--border-accent);
-          border-radius: var(--radius);
-          padding: 12px 16px;
-          gap: 8px;
-          background: white;
-          transition: border-color 0.2s;
-          cursor: text;
-        }
-        .keep-input-wrapper:focus-within {
-          border-color: var(--text-accent);
-          box-shadow: 0 0 0 3px rgba(12, 68, 124, 0.12);
-        }
-        .keep-input-prefix {
-          font-size: 18px;
-          color: var(--text-muted);
-          flex-shrink: 0;
-        }
-        .keep-input-cursor {
-          width: 2px;
-          height: 22px;
-          background: var(--text-accent);
-          margin-left: 2px;
-          animation: keepBlink 1s step-end infinite;
-          flex-shrink: 0;
-        }
-        @keyframes keepBlink { 0%, 100% { opacity:1; } 50% { opacity:0; } }
-        .keep-result-box {
-          background: var(--bg-success);
-          border: 1.5px solid var(--text-success);
-          border-radius: var(--radius);
-          padding: 14px 16px;
-          margin-top: 12px;
-          animation: popIn 0.35s ease both;
-        }
-        .keep-result-box .keep-result-title {
-          font-size: 11px;
-          font-weight: 600;
-          color: var(--text-success);
-          letter-spacing: 0.8px;
-          margin-bottom: 6px;
-        }
-        .keep-result-box .keep-result-val {
-          font-size: 22px;
-          font-weight: 700;
-          color: var(--text-primary);
-        }
-        .keep-result-box .keep-result-sub {
-          font-size: 12px;
-          color: var(--text-secondary);
-          margin-top: 4px;
-          line-height: 1.5;
-        }
-        .keep-btn-active {
-          opacity: 1 !important;
-          cursor: pointer !important;
+          font-family: var(--font-body);
         }
       </style>
     `;
 
-    // ── Interactive JS injected into every HTML slide ──────────────────────────
-    // Detects static "faux-input" display spans and replaces them with real
-    // editable fields. Also activates buttons to compute live results.
-    const interactiveJS = `
-      <script>
-      (function() {
-        // Run after DOM is ready
-        function activateSlide() {
-          var wrapper = document.querySelector('.slide-html-wrapper');
-          if (!wrapper) return;
-
-          // ── 1. Find bordered "display value" containers and make them editable ──
-          // These are divs/spans styled with border that contain a numeric <span>
-          // Pattern: a container div with border-accent style containing a large font-size span
-          var allDivs = wrapper.querySelectorAll('div');
-          allDivs.forEach(function(div) {
-            var style = div.getAttribute('style') || '';
-            // Match containers that look like input field wrappers
-            var looksLikeInputWrapper = (
-              (style.includes('border') && (style.includes('border-accent') || style.includes('A9C7E8'))) ||
-              (style.includes('border') && style.includes('border-radius') && style.includes('padding'))
-            );
-            if (!looksLikeInputWrapper) return;
-            if (div.classList.contains('keep-activated')) return;
-
-            // Find the value span — typically the largest font-size span inside
-            var spans = div.querySelectorAll('span');
-            var valueSpan = null;
-            var prefixSpan = null;
-            var cursorSpan = null;
-
-            spans.forEach(function(sp) {
-              var spStyle = sp.getAttribute('style') || '';
-              var spText = (sp.textContent || '').trim();
-              // Currency / prefix spans: single char or currency symbol
-              if (spText.length <= 2 && (spText.match(/[₹$€£¥]/) || spText === '')) {
-                prefixSpan = sp;
-                return;
-              }
-              // Cursor spans: thin 2px wide
-              if (spStyle.includes('width:2px') || spStyle.includes('width: 2px')) {
-                cursorSpan = sp;
-                return;
-              }
-              // Value span: contains a number
-              if (/[0-9]/.test(spText) && (spStyle.includes('font-size') || spText.length > 0)) {
-                valueSpan = sp;
-              }
-            });
-
-            if (!valueSpan) return;
-
-            div.classList.add('keep-activated');
-
-            // Extract existing value
-            var rawVal = (valueSpan.textContent || '').replace(/,/g, '').trim();
-            var prefix = prefixSpan ? (prefixSpan.textContent || '').trim() : '';
-
-            // Build editable replacement
-            var wrapper2 = document.createElement('div');
-            wrapper2.className = 'keep-input-wrapper';
-
-            if (prefix) {
-              var prefixEl = document.createElement('span');
-              prefixEl.className = 'keep-input-prefix';
-              prefixEl.textContent = prefix;
-              wrapper2.appendChild(prefixEl);
-            }
-
-            var input = document.createElement('input');
-            input.type = 'text';
-            input.inputMode = 'numeric';
-            input.pattern = '[0-9,]*';
-            input.className = 'keep-editable-field';
-            input.value = rawVal;
-            input.setAttribute('data-raw', rawVal);
-            input.style.fontSize = '24px';
-            input.style.fontWeight = '700';
-            wrapper2.appendChild(input);
-
-            // Format on blur, raw on focus
-            input.addEventListener('focus', function() {
-              this.value = this.getAttribute('data-raw') || this.value.replace(/,/g,'');
-              wrapper2.style.borderColor = 'var(--text-accent)';
-            });
-            input.addEventListener('blur', function() {
-              var n = parseFloat(this.value.replace(/,/g,''));
-              if (!isNaN(n)) {
-                this.setAttribute('data-raw', String(n));
-                this.value = n.toLocaleString('en-IN');
-              }
-              wrapper2.style.borderColor = 'var(--border-accent)';
-            });
-            input.addEventListener('input', function() {
-              var clean = this.value.replace(/[^0-9.]/g,'');
-              this.setAttribute('data-raw', clean);
-              this.value = clean;
-            });
-
-            // Replace the container
-            div.style.border = 'none';
-            div.style.padding = '0';
-            div.style.background = 'transparent';
-            // Clear children and put our wrapper
-            while (div.firstChild) div.removeChild(div.firstChild);
-            div.appendChild(wrapper2);
-          });
-
-          // Ensure all buttons are clickable and visible
-          var buttons = wrapper.querySelectorAll('button, .opt, [role="button"]');
-          buttons.forEach(function(btn) {
-            (btn as HTMLElement).style.pointerEvents = 'auto';
-            (btn as HTMLElement).style.cursor = 'pointer';
-            (btn as HTMLElement).removeAttribute('disabled');
-          });
-
-          // ── 2. Activate buttons to compute results & navigate ──
-          buttons.forEach(function(btn) {
-            if (btn.classList.contains('keep-btn-activated')) return;
-            btn.classList.add('keep-btn-activated', 'keep-btn-active');
-
-            var handleBtnAction = function(e: Event) {
-              e.preventDefault();
-              e.stopPropagation();
-
-              var btnText = (btn.textContent || '').toLowerCase().trim();
-
-              // 1. Next / Continue / Audit / Risk Buttons -> Navigate to next slide immediately
-              if (
-                btn.classList.contains('i-3') ||
-                btn.classList.contains('seq3') ||
-                btn.classList.contains('seq4') ||
-                btnText.includes('next') ||
-                btnText.includes('continue') ||
-                btnText.includes('analyze') ||
-                btnText.includes('audit') ||
-                btnText.includes('risk') ||
-                btnText.includes('let\'s find out') ||
-                btnText.includes('build defensive') ||
-                btnText.includes('patch the firewall') ||
-                btnText.includes('optimize my tranches')
-              ) {
-                // Dispatch next slide navigation event
-                window.dispatchEvent(new CustomEvent('keep-navigate-next'));
-                return;
-              }
-
-              // 2. Choice Option Buttons (Screen 12/13 Yes/No, Credit Card Branching options)
-              var isChoiceBtn = (
-                btn.classList.contains('opt') ||
-                btnText === 'yes' ||
-                btnText === 'no' ||
-                btnText.includes('yes,') ||
-                btnText.includes('no,') ||
-                btnText.includes('have one') ||
-                btnText.includes('pocket money') ||
-                btnText.includes('no income')
-              );
-
-              if (isChoiceBtn) {
-                var parent = btn.parentNode;
-                if (parent) {
-                  var siblings = parent.querySelectorAll('button, .opt');
-                  siblings.forEach(function(s) {
-                    (s as HTMLElement).style.opacity = '0.5';
-                    (s as HTMLElement).style.border = '1.5px solid var(--border, #E5E4DE)';
-                    (s as HTMLElement).style.background = 'var(--surface-1, #F5F5F3)';
-                    (s as HTMLElement).style.color = 'var(--text-secondary, #5F5E5A)';
-                    (s as HTMLElement).style.fontWeight = '500';
-                  });
-                }
-
-                (btn as HTMLElement).style.opacity = '1';
-                (btn as HTMLElement).style.border = '2px solid var(--text-accent, #0C447C)';
-                (btn as HTMLElement).style.background = 'var(--bg-accent, #E6F1FB)';
-                (btn as HTMLElement).style.color = 'var(--text-accent, #0C447C)';
-                (btn as HTMLElement).style.fontWeight = '700';
-
-                // Save choice to global state
-                if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
-                var slideText = (wrapper.textContent || '').toLowerCase();
-                var answerVal = btnText.includes('yes') ? 'Yes' : 'No';
-                if (slideText.includes('health insurance') || slideText.includes('separate from your employer')) {
-                  (window as any).__KEEP_STATE__.corporateLeashAnswer = answerVal;
-                } else if (slideText.includes('term life') || slideText.includes('cheapest for your age')) {
-                  (window as any).__KEEP_STATE__.earlyLockAnswer = answerVal;
-                }
-
-                // Enable Continue/Next button (.i-3) if present
-                var continueBtn = wrapper.querySelector('.i-3') || wrapper.querySelector('button.i-3');
-                if (continueBtn) {
-                  (continueBtn as HTMLElement).style.opacity = '1';
-                  (continueBtn as HTMLElement).style.pointerEvents = 'auto';
-                  (continueBtn as HTMLElement).style.cursor = 'pointer';
-                }
-
-                // Remove existing result box if any
-                var existing = wrapper.querySelector('.keep-result-box');
-                if (existing) existing.remove();
-
-                var resultBox = document.createElement('div');
-                resultBox.className = 'keep-result-box';
-                var title = document.createElement('div');
-                title.className = 'keep-result-title';
-                var resultVal = document.createElement('div');
-                resultVal.className = 'keep-result-val';
-                var resultSub = document.createElement('div');
-                resultSub.className = 'keep-result-sub';
-
-                title.textContent = '👍 CHOICE RECORDED';
-                resultVal.textContent = (btn.textContent || '').trim();
-                resultSub.textContent = 'Whatever you pick, there\'s a real answer for you next. Click Next to continue.';
-                resultBox.appendChild(title);
-                resultBox.appendChild(resultVal);
-                resultBox.appendChild(resultSub);
-                btn.parentNode.insertBefore(resultBox, btn.nextSibling);
-                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                return;
-              }
-
-              if (btnText.includes('utilisation') || btnText.includes('calculate') || btnText.includes('number')) {
-                // Credit limit utilisation: 30% rule
-                var thirtyPct = Math.round(val1 * 0.30);
-                title.textContent = '✅ YOUR SAFE SPENDING LIMIT';
-                resultVal.textContent = '₹' + thirtyPct.toLocaleString('en-IN');
-                resultSub.textContent = 'Keep your monthly spend below this (30% of ₹' + val1.toLocaleString('en-IN') + ') to protect your credit score. Going above 30% hurts your CIBIL score.';
-              } else if (btnText.includes('next') || btnText.includes('age') || val1 > 0) {
-                // Age → retirement wealth projection
-                var yearsLeft = Math.max(0, 60 - val1);
-                var monthlyAmount = 5000;
-                var annualReturn = 0.12;
-                var months = yearsLeft * 12;
-                var corpus = monthlyAmount * ((Math.pow(1 + annualReturn/12, months) - 1) / (annualReturn/12));
-                title.textContent = '📈 IF YOU START SIP TODAY AT AGE ' + Math.round(val1);
-                resultVal.textContent = '₹' + Math.round(corpus/100000).toLocaleString('en-IN') + ' Lakh';
-                resultSub.textContent = 'Investing just ₹5,000/month in a NIFTY 50 index fund at ~12% CAGR until age 60 gives you this corpus. Starting earlier is the biggest advantage.';
-              } else if (btnText.includes('save') || btnText.includes('invest')) {
-                var monthlyInvest = val1;
-                var years = val2 || 10;
-                var fv = monthlyInvest * ((Math.pow(1.01, years * 12) - 1) / 0.01);
-                title.textContent = '📊 PROJECTED CORPUS IN ' + Math.round(years) + ' YEARS';
-                resultVal.textContent = '₹' + Math.round(fv / 100000).toLocaleString('en-IN') + ' Lakh';
-                resultSub.textContent = 'At 12% annual returns, investing ₹' + monthlyInvest.toLocaleString('en-IN') + '/month grows to this amount in ' + Math.round(years) + ' years through compounding.';
-              } else if (btnText.includes('both sides') || btnText.includes('rent')) {
-                var rent = val1 || 25000;
-                var home = val2 || 10000000;
-                var emi = Math.round((home * 0.8) * 0.0085 * (Math.pow(1.0085, 240) / (Math.pow(1.0085, 240) - 1)));
-                title.textContent = '⚖️ RENT VS. BUY';
-                resultVal.textContent = 'Rent: ₹' + rent.toLocaleString('en-IN') + ' vs EMI: ₹' + emi.toLocaleString('en-IN');
-                resultSub.textContent = 'Buying a ₹' + (home/100000).toLocaleString('en-IN') + 'L home requires ~₹' + ((home*0.2)/100000).toLocaleString('en-IN') + 'L upfront and an EMI of ~₹' + emi.toLocaleString('en-IN') + '/month for 20 years.';
-              } else if (btnText.includes('tranches') || btnText.includes('firewall gap')) {
-                title.textContent = '🛡️ RISK AUDIT RESULT';
-                resultVal.textContent = 'Personal Firewall Gap Detected';
-                resultSub.textContent = 'Relying only on employer insurance leaves you exposed when changing jobs. A personal health and term policy keeps your investment tranches safe.';
-              } else {
-                // Generic: show what was entered
-                title.textContent = '✅ GOT IT!';
-                resultVal.textContent = (values.map(function(v) { return '₹' + v.toLocaleString('en-IN'); }).join('  ·  ')) || 'Saved';
-                resultSub.textContent = 'Your number has been noted. Scroll down to continue the lesson.';
-              }
-
-              resultBox.appendChild(title);
-              resultBox.appendChild(resultVal);
-              resultBox.appendChild(resultSub);
-
-              resultBox.appendChild(title);
-              resultBox.appendChild(resultVal);
-              resultBox.appendChild(resultSub);
-
-              // Insert result after the button
-              btn.parentNode.insertBefore(resultBox, btn.nextSibling);
-              resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            };
-
-            btn.addEventListener('click', handleBtnAction);
-            btn.addEventListener('touchend', handleBtnAction);
-          });
-        }
-
-        // Run immediately + after short delay (for animated slides)
-        activateSlide();
-        setTimeout(activateSlide, 400);
-        setTimeout(activateSlide, 800);
-      })();
-      </script>
-    `;
-
-    const wrappedHtml = `<div class="slide-html-wrapper">${html}</div>${interactiveJS}`;
-
     return (
       <View style={htmlStyle.container}>
         <div
+          ref={containerRef}
           style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          dangerouslySetInnerHTML={{ __html: tablerIconsCdn + tokensCssVars + wrappedHtml }}
+          dangerouslySetInnerHTML={{ __html: tablerIconsCdn + tokensCssVars + `<div class="slide-html-wrapper">${html}</div>` }}
         />
       </View>
     );
@@ -563,8 +256,6 @@ const htmlStyle = StyleSheet.create({
     overflow: 'hidden',
   },
 });
-
-
 
 function QuizSlide({
   slide,
@@ -585,7 +276,7 @@ function QuizSlide({
   return (
     <ScrollView style={q.scroll} contentContainerStyle={q.content} showsVerticalScrollIndicator={false}>
 
-      {/* ── Knowledge Check Banner (full-width gradient, Duolingo-inspired) ── */}
+      {/* ── Knowledge Check Banner ── */}
       <View style={q.banner}>
         <Text style={q.bannerText}>🎯  KNOWLEDGE CHECK</Text>
       </View>
@@ -600,7 +291,6 @@ function QuizSlide({
               ? quizState.correctOption === i
               : slide.correctOption === i);
 
-            // ── Colour logic: emerald correct, rose wrong ──
             let bg = 'rgba(255, 255, 255, 0.05)';
             let borderColor = 'rgba(255, 255, 255, 0.14)';
             let borderBottomColor = 'rgba(0,0,0,0.35)';
@@ -611,7 +301,6 @@ function QuizSlide({
 
             if (answered) {
               if (isCorrectOption) {
-                // ✅ Emerald correct
                 bg = Colors.correctBg;
                 borderColor = Colors.correctBorder;
                 borderBottomColor = Colors.emeraldDim;
@@ -620,7 +309,6 @@ function QuizSlide({
                 iconText = '✓ CORRECT';
                 shadowStyle = { shadowColor: Colors.emerald, shadowOpacity: 0.35, shadowRadius: 8, shadowOffset: { width: 0, height: 0 } };
               } else if (isSelected) {
-                // ❌ Rose wrong
                 bg = Colors.wrongBg;
                 borderColor = Colors.wrongBorder;
                 borderBottomColor = Colors.roseDim;
@@ -629,7 +317,6 @@ function QuizSlide({
                 iconText = '✕ WRONG';
                 shadowStyle = { shadowColor: Colors.rose, shadowOpacity: 0.25, shadowRadius: 6, shadowOffset: { width: 0, height: 0 } };
               } else {
-                // Dimmed unselected
                 bg = 'rgba(255,255,255,0.02)';
                 borderColor = 'transparent';
                 borderBottomColor = 'transparent';
@@ -637,7 +324,6 @@ function QuizSlide({
                 letterBorderColor = 'rgba(255,255,255,0.08)';
               }
             } else if (isSelected) {
-              // Pre-answer selected state
               bg = 'rgba(30,136,229,0.15)';
               borderColor = Colors.sapphire;
               borderBottomColor = Colors.sapphireDim;
@@ -660,17 +346,14 @@ function QuizSlide({
                 ]}
                 onPress={() => { if (!answered) onOptionSelect(i); }}
               >
-                {/* Letter badge */}
                 <View style={[q.optionLetter, { borderColor: letterBorderColor }]}>
                   <Text style={[q.optionLetterText, { color: textColor }]}>
                     {['A', 'B', 'C', 'D'][i] ?? i + 1}
                   </Text>
                 </View>
 
-                {/* Option text — 16px Inter Medium */}
                 <Text style={[q.optionText, { color: textColor }]}>{option}</Text>
 
-                {/* Result icon */}
                 {iconText ? (
                   <Text style={[q.optionIcon, {
                     color: iconText.includes('✓') ? Colors.emerald : Colors.rose,
@@ -683,7 +366,6 @@ function QuizSlide({
           })}
       </Animated.View>
 
-      {/* ── Explanation box ── */}
       {answered ? (
         <View style={[
           q.explanationBox,
@@ -725,7 +407,6 @@ const q = StyleSheet.create({
   scroll: { flex: 1 },
   content: { padding: Space.lg, gap: 16 },
 
-  // ── Full-width Knowledge Check banner ──
   banner: {
     backgroundColor: 'rgba(30,136,229,0.18)',
     borderWidth: 1,
@@ -743,9 +424,8 @@ const q = StyleSheet.create({
     fontFamily: 'Inter, sans-serif',
   },
 
-  // ── Question ──
   question: {
-    fontSize: Font.lg,          // 20px (up from 22, tighter)
+    fontSize: Font.lg,
     fontWeight: Font.bold,
     color: Colors.text,
     lineHeight: 29,
@@ -753,17 +433,16 @@ const q = StyleSheet.create({
     fontFamily: "'Plus Jakarta Sans', sans-serif",
   },
 
-  // ── Options list ──
   optionList: { gap: 10 },
   option: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 52,             // Duolingo standard tap target
+    minHeight: 52,
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: Radius.lg,
     borderWidth: 1.5,
-    borderBottomWidth: 3,      // 3D depth bottom border
+    borderBottomWidth: 3,
     gap: 12,
   },
   optionPressed: {
@@ -786,7 +465,7 @@ const q = StyleSheet.create({
   },
   optionText: {
     flex: 1,
-    fontSize: 16,              // 16px — Duolingo standard (up from 13.5)
+    fontSize: 16,
     lineHeight: 22,
     fontWeight: Font.medium,
     fontFamily: 'Inter, sans-serif',
@@ -798,7 +477,6 @@ const q = StyleSheet.create({
     fontFamily: 'Inter, sans-serif',
   },
 
-  // ── Explanation box ──
   explanationBox: {
     borderWidth: 1.5,
     borderRadius: Radius.lg,
