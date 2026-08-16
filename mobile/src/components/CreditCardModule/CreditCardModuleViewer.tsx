@@ -127,6 +127,17 @@ export function CreditCardModuleViewer() {
       const optNo1 = wrapper.querySelector('#opt-no1') as HTMLButtonElement;
       const optNo2 = wrapper.querySelector('#opt-no2') as HTMLButtonElement;
       const feedback = wrapper.querySelector('#feedback-result') as HTMLDivElement;
+      const nextBtn = wrapper.querySelector('#s12-next-btn') as HTMLButtonElement;
+
+      const revealNextBtn = () => {
+        if (nextBtn) {
+          nextBtn.style.display = 'flex';
+          nextBtn.onclick = (e) => {
+            e.preventDefault();
+            goToNext();
+          };
+        }
+      };
 
       if (optYes && feedback) {
         optYes.onclick = (e) => {
@@ -136,10 +147,12 @@ export function CreditCardModuleViewer() {
           if (optNo2) optNo2.className = 'opt opt-dimmed';
           feedback.innerHTML = `
             <div class="feedback-box" style="background:#EAF3DE; border:1.5px solid #27500A; color:#27500A;">
-              <p style="font-size:16px; font-weight:700; margin:0 0 4px;">🎉 Great!</p>
+              <div class="celebration-badge">🎉 🎊 ✨</div>
+              <p style="font-size:18px; font-weight:800; margin:4px 0 2px;">Great!</p>
               <p style="font-size:13px; margin:0; opacity:0.9;">Having a credit card gives you a head start to build your credit score properly.</p>
             </div>
           `;
+          revealNextBtn();
         };
       }
 
@@ -151,10 +164,12 @@ export function CreditCardModuleViewer() {
           if (optNo2) optNo2.className = 'opt opt-dimmed';
           feedback.innerHTML = `
             <div class="feedback-box" style="background:#E6F1FB; border:1.5px solid #0C447C; color:#0C447C;">
-              <p style="font-size:16px; font-weight:700; margin:0 0 4px;">💡 You should have one !!</p>
+              <div style="font-size:32px;">💡</div>
+              <p style="font-size:18px; font-weight:800; margin:4px 0 2px;">You should have one !!</p>
               <p style="font-size:13px; margin:0; opacity:0.9;">A credit card is an essential tool to build your credit score safely without spending extra money.</p>
             </div>
           `;
+          revealNextBtn();
         };
       }
 
@@ -166,16 +181,18 @@ export function CreditCardModuleViewer() {
           if (optNo1) optNo1.className = 'opt opt-dimmed';
           feedback.innerHTML = `
             <div class="feedback-box" style="background:#E6F1FB; border:1.5px solid #0C447C; color:#0C447C;">
-              <p style="font-size:16px; font-weight:700; margin:0 0 4px;">💡 You should have one !!</p>
+              <div style="font-size:32px;">💡</div>
+              <p style="font-size:18px; font-weight:800; margin:4px 0 2px;">You should have one !!</p>
               <p style="font-size:13px; margin:0; opacity:0.9;">A credit card is an essential tool to build your credit score safely without spending extra money.</p>
             </div>
           `;
+          revealNextBtn();
         };
       }
 
       // General CTA buttons handler for all other slides
       const ctaBtn = wrapper.querySelector('button.cta') as HTMLButtonElement;
-      if (ctaBtn) {
+      if (ctaBtn && ctaBtn.id !== 's12-next-btn') {
         ctaBtn.onclick = (e) => {
           e.preventDefault();
           goToNext();
