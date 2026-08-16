@@ -35,14 +35,14 @@ interface FeatureIconItem {
 
 const MODULE_ITEMS: FeatureIconItem[] = [
   {
-    id: 'feat-credit-card',
-    icon: '💳',
-    title: 'Credit Card Masterclass',
-    subtitle: 'Avoid 24% interest traps & build credit score',
-    tag: 'ESSENTIAL',
+    id: 'feat-course-101',
+    icon: '🛡️',
+    title: 'Insurance Risk Shield',
+    subtitle: 'Risk transfer & health emergency protection',
+    tag: 'DEFENSE',
     actionType: 'LESSON',
-    targetId: 'lesson-cc-masterclass',
-    targetTitle: 'Credit Card Masterclass',
+    targetId: 'lesson-insurance-basics',
+    targetTitle: 'Insurance Basics & Risk Shields',
   },
   {
     id: 'feat-index-fund',
@@ -55,14 +55,14 @@ const MODULE_ITEMS: FeatureIconItem[] = [
     targetTitle: 'Index Funds: The Boring Wealth Engine',
   },
   {
-    id: 'feat-course-101',
-    icon: '🛡️',
-    title: 'Insurance Risk Shield',
-    subtitle: 'Risk transfer & health emergency protection',
-    tag: 'DEFENSE',
+    id: 'feat-credit-card',
+    icon: '💳',
+    title: 'Credit Card Masterclass',
+    subtitle: 'Avoid 24% interest traps & build credit score',
+    tag: 'ESSENTIAL',
     actionType: 'LESSON',
-    targetId: 'lesson-insurance-basics',
-    targetTitle: 'Insurance Basics & Risk Shields',
+    targetId: 'lesson-cc-masterclass',
+    targetTitle: 'Credit Card Masterclass',
   },
 ];
 
