@@ -104,16 +104,9 @@
       "order": 13
     },
     {
-      "slide_number": 17,
-      "slide_id": "idx-s16-final",
-      "description": "Screen 16 — Final Action",
-      "html": "<style>\n    @keyframes drift { 0% { opacity:0; transform:translateY(14px); } 100% { opacity:1; transform:translateY(0); } }\n    .s1 { animation: drift .5s ease .1s both; }\n    .s4 { animation: drift .5s ease .4s both; }\n    .strikeout { position: relative; display: inline-block; }\n    .strikeout::after { content: ''; position: absolute; left: 0; top: 52%; height: 2px; background: #a83232; width: 100%; }\n</style>\n\n<div style=\"width:100%; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; text-align:center; background:var(--fill-primary, #171717); color:#FFFFFF; padding:24px 20px; box-sizing:border-box;\">\n\n  <div class=\"s1\" style=\"margin-top:20px;\">\n    <p style=\"font-size:15px; color:#FFFFFF; font-weight:500; margin:0; opacity:0.5;\">\n      <span class=\"strikeout\">You don't need a trading course.</span>\n    </p>\n    <p style=\"font-family:Georgia,serif; font-size:42px; font-weight:700; color:#FFFFFF; margin:14px 0 0; line-height:1.1;\">\n      You need<br>a plan.\n    </p>\n  </div>\n\n  <div class=\"s4\" style=\"width:100%; max-width:280px; display:flex; flex-direction:column; gap:12px; margin-top:16px;\">\n    <button style=\"background:#FFFFFF; color:#171717; border:none; border-radius:14px; padding:16px; font-size:14px; font-weight:700; cursor:pointer; width:100%; box-shadow: 0 4px 12px rgba(255,255,255,0.15);\">\n      I'll go compare my options\n    </button>\n    <button style=\"background:transparent; color:#FFFFFF; opacity:0.5; border:none; font-size:12px; text-decoration:underline; cursor:pointer; padding:6px; text-align:center;\">\n      I still want to day trade\n    </button>\n  </div>\n\n</div>",
-      "order": 14
-    },
-    {
       "id": "idx-s15-sip-rule",
       "slide_id": "idx-s15-sip-rule",
-      "order": 15,
+      "order": 14,
       "type": "STORY",
       "title": "The SIP Rule",
       "html": "<style>\n    @keyframes drift { 0% { opacity:0; transform:translateY(14px); } 100% { opacity:1; transform:translateY(0); } }\n    @keyframes lockSnap { 0% { transform:translateY(-20px) scale(1.2); opacity:0; } 50% { transform:translateY(2px) scale(0.95); opacity:1; } 100% { transform:translateY(0) scale(1); opacity:1; } }\n    @keyframes pulseCal { 0% { transform:scale(1); filter:drop-shadow(0 0 0 transparent); } 100% { transform:scale(1.05); filter:drop-shadow(0 0 10px rgba(45, 138, 78, 0.3)); } }\n    .s1 { animation: drift .5s ease .1s both; }\n    .s2 { animation: drift .5s ease .4s both; }\n    .s3 { animation: drift .5s ease .7s both; }\n    .lock-anim { animation: lockSnap .6s cubic-bezier(.3, .7, .4, 1.5) .6s both; }\n    .cal-anim { animation: pulseCal 2s ease-in-out infinite alternate 1.0s; }\n</style>\n\n<div style=\"width:100%; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; background:var(--surface-2, #FFFFFF); color: var(--text-primary, #171717); padding:24px 20px; box-sizing:border-box;\">\n\n  <div class=\"s1\" style=\"margin-top:10px;\">\n    <p style=\"font-family:Georgia,serif; font-size:32px; line-height:1.1; font-weight:700; margin:0; color:#111;\">Remove<br>Emotion.</p>\n  </div>\n\n  <div class=\"s2\" style=\"position:relative; width:100px; height:100px; margin:0 auto; display:flex; align-items:center; justify-content:center;\">\n    <i class=\"ti ti-calendar cal-anim\" style=\"font-size:64px; color:var(--text-secondary, #666); stroke-width: 1.2;\"></i>\n    <div class=\"lock-anim\" style=\"position:absolute; bottom:6px; right:2px; background:var(--surface-2, #FFFFFF); border-radius:50%; padding:6px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.1);\">\n      <i class=\"ti ti-lock\" style=\"font-size:28px; color:#2d8a4e; fill:#2d8a4e;\"></i>\n    </div>\n  </div>\n\n  <div class=\"s3\" style=\"max-width:280px;\">\n    <p style=\"font-size:13.5px; color:var(--text-secondary, #555); line-height:1.6; margin:0 0 12px;\">The engine works best when you remove human emotion from it.</p>\n    <p style=\"font-size:13.5px; color:var(--text-secondary, #555); line-height:1.6; margin:0;\">Automate it through a SIP — money drafted from your account on a fixed date, before your brain gets a chance to talk you out of it.</p>\n  </div>\n\n</div>"
@@ -132,6 +125,13 @@
       ],
       "correctOption": 1,
       "explanation": "Systematic Investment Plan — automatically investing a fixed amount every month regardless of market ups and downs.",
+      "order": 15
+    },
+    {
+      "slide_number": 17,
+      "slide_id": "idx-s16-final",
+      "description": "Screen 16 — Final Action",
+      "html": "<style>\n    @keyframes drift { 0% { opacity:0; transform:translateY(14px); } 100% { opacity:1; transform:translateY(0); } }\n    .s1 { animation: drift .5s ease .1s both; }\n    .strikeout { position: relative; display: inline-block; }\n    .strikeout::after { content: ''; position: absolute; left: 0; top: 52%; height: 2px; background: #a83232; width: 100%; }\n</style>\n\n<div style=\"width:100%; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center; background:var(--fill-primary, #171717); color:#FFFFFF; padding:24px 20px; box-sizing:border-box;\">\n\n  <div class=\"s1\">\n    <p style=\"font-size:16px; color:#FFFFFF; font-weight:500; margin:0; opacity:0.5;\">\n      <span class=\"strikeout\">You don't need a trading course.</span>\n    </p>\n    <p style=\"font-family:Georgia,serif; font-size:44px; font-weight:700; color:#FFFFFF; margin:16px 0 0; line-height:1.1;\">\n      You need<br>a plan.\n    </p>\n  </div>\n\n</div>",
       "order": 16
     }
   ]
