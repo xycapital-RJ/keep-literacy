@@ -68,13 +68,13 @@ const MODULE_ITEMS: FeatureIconItem[] = [
 
 const REAL_WORLD_ITEMS: FeatureIconItem[] = [
   {
-    id: 'feat-scen-cc',
-    icon: '🎯',
-    title: 'Credit Card Trap Solver',
-    subtitle: 'Simulate $3,500 payoff vs minimum payments',
-    tag: 'SIMULATOR',
+    id: 'feat-scen-inflation',
+    icon: '⚡',
+    title: 'Inflation Budget Survival',
+    subtitle: 'Rebalance cash flow during 12% price jumps',
+    tag: 'BUDGET',
     actionType: 'SCENARIO',
-    targetId: 'scen-credit-card-trap',
+    targetId: 'scen-inflation-budget',
   },
   {
     id: 'feat-scen-salary',
@@ -86,13 +86,13 @@ const REAL_WORLD_ITEMS: FeatureIconItem[] = [
     targetId: 'scen-salary-negotiation',
   },
   {
-    id: 'feat-scen-inflation',
-    icon: '⚡',
-    title: 'Inflation Budget Survival',
-    subtitle: 'Rebalance cash flow during 12% price jumps',
-    tag: 'BUDGET',
+    id: 'feat-scen-cc',
+    icon: '🎯',
+    title: 'Credit Card Trap Solver',
+    subtitle: 'Simulate $3,500 payoff vs minimum payments',
+    tag: 'SIMULATOR',
     actionType: 'SCENARIO',
-    targetId: 'scen-inflation-budget',
+    targetId: 'scen-credit-card-trap',
   },
 ];
 
