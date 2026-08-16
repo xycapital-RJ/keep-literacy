@@ -197,8 +197,8 @@ export function IndexFundsModuleViewer() {
       }
 
       // --- Dynamic calculation & text updating across timeline & reveal slides (connected to userAge) ---
-      const ageVal = userAge && userAge > 0 && userAge < 100 ? userAge : 20;
-      const monthlyVal = userContribution && userContribution > 0 ? userContribution : 5000;
+      const ageVal = userAge && userAge > 0 && userAge < 100 ? userAge : 25;
+      const monthlyVal = userContribution && userContribution > 0 ? userContribution : 10000;
 
       // Sync to window.__KEEP_STATE__ for unified engine access
       if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
@@ -233,13 +233,13 @@ export function IndexFundsModuleViewer() {
       // 1. Screen 13: Timeline & Meaningful Pie Chart (idx-s13-timeline)
       if (activeSlide?.slide_id === 'idx-s13-timeline') {
         const titleEl = wrapper.querySelector('#s13-title');
-        if (titleEl) titleEl.textContent = `Let's project your savings from age ${ageVal} to ${targetAgeVal}.`;
+        if (titleEl) titleEl.textContent = `Let's suppose you are ${ageVal} years old right now and save ${formattedMonthly}/month realistically without fail.`;
 
         const subEl = wrapper.querySelector('#s13-sub');
         if (subEl) subEl.textContent = `20 years of compounding @ 12% p.a. (${formattedMonthly}/mo)`;
 
         const assumpEl = wrapper.querySelector('#s13-assumption');
-        if (assumpEl) assumpEl.textContent = `⚡ Assuming 12% Annual Interest Rate on ${formattedMonthly}/month`;
+        if (assumpEl) assumpEl.textContent = `⚡ After 20 Years of Consistency (Age ${ageVal} → ${targetAgeVal}) @ 12% p.a.`;
 
         const multEl = wrapper.querySelector('#s13-mult');
         if (multEl) multEl.textContent = `${multVal}x`;
@@ -263,7 +263,7 @@ export function IndexFundsModuleViewer() {
         if (targetLbl) targetLbl.textContent = `${targetAgeVal}`;
 
         const totEl = wrapper.querySelector('#s13-total');
-        if (totEl) totEl.textContent = formattedProjected;
+        if (totEl) totEl.textContent = `${formattedProjected}${fvVal >= 9000000 && fvVal < 11000000 ? ' (~1 Cr)' : ''}`;
 
         // Dynamic Pie SVG Slice Arc adjustment
         const returnsCircle = wrapper.querySelector('.donut-returns');

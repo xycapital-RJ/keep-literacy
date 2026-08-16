@@ -159,8 +159,8 @@ function HtmlSlide({ html }: { html: string }) {
 
       // ── Dynamic Compounding Calculation for Timeline & Pie Chart (Slide 13) ──
       const state = (window as any).__KEEP_STATE__ || {};
-      const ageVal = parseFloat(state.userAge) || 20;
-      const monthlyVal = parseFloat(state.userContribution) || 5000;
+      const ageVal = parseFloat(state.userAge) || 25;
+      const monthlyVal = parseFloat(state.userContribution) || 10000;
       const targetAgeVal = ageVal + 20;
       const yearsVal = 20;
       const monthsVal = yearsVal * 12;
@@ -188,13 +188,13 @@ function HtmlSlide({ html }: { html: string }) {
 
       // Update Timeline elements by ID if present
       const titleEl = wrapper.querySelector('#s13-title');
-      if (titleEl) titleEl.textContent = `Let's project your savings from age ${ageVal} to ${targetAgeVal}.`;
+      if (titleEl) titleEl.textContent = `Let's suppose you are ${ageVal} years old right now and save ${formattedMonthly}/month realistically without fail.`;
 
       const subEl = wrapper.querySelector('#s13-sub');
       if (subEl) subEl.textContent = `20 years of compounding @ 12% p.a. (${formattedMonthly}/mo)`;
 
       const assumpEl = wrapper.querySelector('#s13-assumption');
-      if (assumpEl) assumpEl.textContent = `⚡ Assuming 12% Annual Interest Rate on ${formattedMonthly}/month`;
+      if (assumpEl) assumpEl.textContent = `⚡ After 20 Years of Consistency (Age ${ageVal} → ${targetAgeVal}) @ 12% p.a.`;
 
       const multEl = wrapper.querySelector('#s13-mult');
       if (multEl) multEl.textContent = `${multVal}x`;
@@ -218,7 +218,7 @@ function HtmlSlide({ html }: { html: string }) {
       if (targetLbl) targetLbl.textContent = `${targetAgeVal}`;
 
       const totEl = wrapper.querySelector('#s13-total');
-      if (totEl) totEl.textContent = formattedProjected;
+      if (totEl) totEl.textContent = `${formattedProjected}${fvVal >= 9000000 && fvVal < 11000000 ? ' (~1 Cr)' : ''}`;
 
       const returnsCircle = wrapper.querySelector('.donut-returns');
       if (returnsCircle) {
