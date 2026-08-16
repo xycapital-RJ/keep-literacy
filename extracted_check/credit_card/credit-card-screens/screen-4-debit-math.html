@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Screen 4 — The Debit Math</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-body); background:#f0f0ee; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.phone { width:375px; height:780px; background:var(--surface-2); border-radius:40px; border:1px solid var(--border-strong); box-shadow:0 20px 60px rgba(0,0,0,0.12); padding:24px 22px; display:flex; flex-direction:column; }
+.statusbar { display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px; }
+.content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; text-align:center; }
+
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes coinFly1 { 0% { transform:translate(0,0); opacity:1;} 100% { transform:translate(-38px,-48px); opacity:0;} }
+@keyframes coinFly2 { 0% { transform:translate(0,0); opacity:1;} 100% { transform:translate(10px,-58px); opacity:0;} }
+@keyframes coinFly3 { 0% { transform:translate(0,0); opacity:1;} 100% { transform:translate(40px,-42px); opacity:0;} }
+.coin1 { animation: coinFly1 1s ease-out .4s infinite; }
+.coin2 { animation: coinFly2 1s ease-out .65s infinite; }
+.coin3 { animation: coinFly3 1s ease-out .9s infinite; }
+.seq1 { animation: drift .5s ease .1s both; }
+.seq2 { animation: drift .5s ease 1.2s both; }
+.vault-wrap { position:relative; width:100px; height:100px; display:flex; align-items:center; justify-content:center; }
+.coin { position:absolute; font-size:18px; color:var(--text-warning); }
+</style></head>
+<body>
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><i class="ti ti-wifi"></i></div>
+  <div class="content">
+    <p class="seq1" style="font-size:17px; font-weight:500; margin:0; max-width:260px; line-height:1.5;">Swipe a debit card, and the money leaves your bank instantly.</p>
+    <div class="vault-wrap">
+      <i class="ti ti-building-bank" style="font-size:46px; color:var(--text-secondary);"></i>
+      <i class="ti ti-coin coin coin1"></i>
+      <i class="ti ti-coin coin coin2"></i>
+      <i class="ti ti-coin coin coin3"></i>
+    </div>
+    <p class="seq2" style="font-size:14px; color:var(--text-secondary); margin:0; max-width:260px; line-height:1.6;">If someone steals your debit card info, they steal your actual cash — you have to fight the bank to get it back.</p>
+  </div>
+</div>
+</body></html>

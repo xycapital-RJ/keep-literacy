@@ -1,0 +1,39 @@
+<h2 class="sr-only">Mobile app screen showing a pristine white timeline suddenly interrupted by a black ink splatter, representing a small chance of a costly medical emergency that could wipe out years of savings</h2>
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes lineGrow2 { 0% { width:0%;} 100% { width:100%;} }
+@keyframes splatIn { 0%, 55% { opacity:0; transform:scale(0.3);} 65% { opacity:1; transform:scale(1.2);} 75% { transform:scale(0.95);} 100% { opacity:1; transform:scale(1);} }
+.seq1 { animation: drift 0.5s ease 0.1s both; }
+.seq2 { animation: drift 0.5s ease 1.6s both; }
+.line-fill { animation: lineGrow2 1.2s cubic-bezier(.3,.6,.4,1) 0.4s both; }
+.splat { animation: splatIn 2.6s ease 0.4s infinite; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0; background:var(--surface-1); border-radius:12px;">
+<div style="width:280px; height:560px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:20px 20px; box-sizing:border-box; display:flex; flex-direction:column;">
+  <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:8px;"><span>9:41</span><i class="ti ti-wifi" aria-hidden="true"></i></div>
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center;">
+
+    <p class="seq1" style="font-size:16px; font-weight:500; margin:0; max-width:230px; line-height:1.5; color:var(--text-primary);">You might have a 99%+ chance of being fine this year.</p>
+
+    <div style="position:relative; width:220px; height:40px; display:flex; align-items:center;">
+      <div style="width:100%; height:3px; background:var(--surface-1); border-radius:2px; overflow:hidden;">
+        <div class="line-fill" style="height:100%; background:var(--border-strong);"></div>
+      </div>
+      <div class="splat" style="position:absolute; left:76%; top:50%; transform:translate(-50%,-50%);">
+        <svg width="46" height="46" viewBox="0 0 46 46">
+          <circle cx="23" cy="23" r="10" fill="var(--text-primary)"/>
+          <circle cx="12" cy="14" r="4" fill="var(--text-primary)"/>
+          <circle cx="34" cy="12" r="3" fill="var(--text-primary)"/>
+          <circle cx="36" cy="30" r="5" fill="var(--text-primary)"/>
+          <circle cx="10" cy="32" r="3.5" fill="var(--text-primary)"/>
+        </svg>
+      </div>
+    </div>
+
+    <p class="seq2" style="font-size:14px; color:var(--text-secondary); margin:0; max-width:230px; line-height:1.6;">But that small remaining chance of a serious medical emergency doesn't just hurt — it can wipe out years of savings in one hospital bill.</p>
+
+  </div>
+</div>
+</div>

@@ -1,0 +1,31 @@
+<h2 class="sr-only">Mobile app closing screen encouraging the user to look up a direct base health and term policy today, reading exclusions and waiting periods before buying</h2>
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes shieldSettle { 0%, 100% { transform:translateY(0);} 50% { transform:translateY(-3px);} }
+.seq1 { animation: drift 0.5s ease 0.1s both; }
+.seq2 { animation: drift 0.5s ease 0.35s both; }
+.seq3 { animation: drift 0.5s ease 0.6s both; }
+.seq4 { animation: drift 0.5s ease 0.8s both; }
+.shield-final { animation: shieldSettle 2.4s ease-in-out 0.6s infinite; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0; background:var(--surface-1); border-radius:12px;">
+<div style="width:280px; height:560px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:20px 20px; box-sizing:border-box; display:flex; flex-direction:column;">
+  <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:8px;"><span>9:41</span><i class="ti ti-wifi" aria-hidden="true"></i></div>
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center;">
+
+    <i class="ti ti-shield-check shield-final" style="font-size:44px; color:var(--text-accent);" aria-hidden="true"></i>
+
+    <p class="seq1" style="font-size:16px; font-weight:500; margin:0; max-width:225px; line-height:1.5; color:var(--text-primary);">You can't confidently play offense if your defense has an open gap.</p>
+
+    <p class="seq2" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:220px; line-height:1.6;">Look up a direct base health and term policy today — read the exclusions and waiting period before you buy. Protect the engine.</p>
+
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <button class="seq3" style="width:100%; height:48px; border-radius:var(--radius); background:var(--fill-primary); color:var(--on-primary); border:none; font-size:14px; font-weight:500;">Learn how to pick a Health Policy</button>
+    <button class="seq4" style="width:100%; height:36px; border-radius:var(--radius); background:transparent; color:var(--text-muted); border:none; font-size:13px;">Not right now</button>
+  </div>
+</div>
+</div>

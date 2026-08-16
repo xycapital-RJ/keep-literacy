@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 4 — Rent vs. Buy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+    <style>
+        :root {
+            --bg-page: #0a0a0a;
+            --dark-surface: #171717;
+            --light-surface: #fcfcfc;
+            --accent-surface: #e3e4e6;
+            --brand-green: #2d8a4e;
+            --brand-red: #a83232;
+            --brand-gold: #D4AF37;
+            --brand-blue: #4F7CFF;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-page);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Scroll Container */
+        .scroll-container {
+            height: 100vh;
+            width: 100%;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        /* Screen Base */
+        .screen-wrapper {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .screen-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .screen {
+            width: 300px;
+            height: 600px;
+            border-radius: 32px;
+            padding: 32px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Themes */
+        .theme-dark {
+            background: var(--dark-surface);
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .theme-light {
+            background: var(--light-surface);
+            color: #111;
+            border: 1px solid #ddd;
+        }
+
+        .theme-accent {
+            background: var(--accent-surface);
+            color: #111;
+            border: 1px solid #ccc;
+        }
+
+        /* Typography Utilities */
+        h1 {
+            font-family: Georgia, serif;
+            font-size: 32px;
+            line-height: 1.1;
+            margin: 0 0 16px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-family: Georgia, serif;
+            font-size: 24px;
+            line-height: 1.2;
+            margin: 0 0 12px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0 0 16px;
+            opacity: 0.85;
+        }
+
+        .text-muted {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .flex-grow {
+            flex-grow: 1;
+        }
+
+        /* Buttons & Inputs */
+        .btn-primary {
+            background: #fff;
+            color: #111;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            margin-bottom: 12px;
+        }
+
+        .btn-dark {
+            background: #111;
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 12px;
+        }
+
+        .btn-link {
+            background: transparent;
+            color: inherit;
+            border: none;
+            font-size: 13px;
+            text-decoration: underline;
+            opacity: 0.6;
+            cursor: pointer;
+            width: 100%;
+            padding: 8px;
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+        }
+
+        /* Specific Visuals & Animations */
+        @keyframes drift {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes growUp {
+            0% {
+                height: 0%;
+                opacity: 0;
+            }
+
+            100% {
+                height: var(--h);
+                opacity: 1;
+            }
+        }
+
+        .anim-drift {
+            animation: drift 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        .visual-box {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 120px;
+            margin: 20px 0;
+        }
+
+        .split-text {
+            background: linear-gradient(to right, var(--brand-blue) 50%, var(--brand-gold) 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bar {
+            width: 40px;
+            border-radius: 6px 6px 0 0;
+            position: absolute;
+            bottom: 0;
+            animation: growUp 1s ease forwards;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scroll-container">
+
+        <!-- PHASE 1: Screens 1-6 -->
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 1 — The Two Camps</div>
+            <div class="screen theme-light">
+                <div class="anim-drift delay-1">
+                    <h2 style="font-style:italic;">"Renting is throwing money away."</h2>
+                    <p style="font-weight:600; font-style:italic; color:#555;">"Buying is a trap that kills your
+                        mobility."</p>
+                </div>
+                <div class="visual-box anim-drift delay-2" style="animation: pulse 2s infinite ease-in-out;">
+                    <div style="display:flex; align-items:center; gap:16px; font-weight:800;">
+                        <span style="color:var(--brand-red);">RENT</span>
+                        <i class="ti ti-calculator" style="font-size:32px;"></i>
+                        <span style="color:var(--brand-green);">BUY</span>
+                    </div>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>Your relatives believe the first. Some finance content believes the second.</p>
+                    <p style="font-weight:700;">Neither camp has actually run your numbers. <span
+                            style="color:var(--brand-green);">Let's run them.</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 2 — Illusion of Ownership</div>
+            <div class="screen theme-dark text-center">
+                <div class="anim-drift delay-1">
+                    <p class="text-muted">With a 20-year EMI...</p>
+                    <h2>You're building equity in a home the bank has a legal claim on.</h2>
+                </div>
+                <div class="visual-box anim-drift delay-2">
+                    <i class="ti ti-home-2 split-text" style="font-size:100px;"></i>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>You're covering housing costs either way — the real question is whose asset it becomes over time.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 3 — The Concrete Anchor</div>
+            <div class="screen theme-accent text-center">
+                <div class="anim-drift delay-1">
+                    <h1>Real estate is <br><span style="color:#666;">"illiquid."</span></h1>
+                </div>
+                <div class="visual-box anim-drift delay-2" style="flex-direction:column; justify-content:flex-end;">
+                    <i class="ti ti-cash"
+                        style="font-size:48px; color:var(--brand-green); animation: drift 2s infinite alternate;"></i>
+                    <div
+                        style="width:120px; height:60px; background:#a9acb0; border-radius:8px 8px 0 0; border-top:3px solid #888; margin-top:-10px; z-index:2;">
+                    </div>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p style="font-weight:600;">Need money fast for an emergency or a big opportunity?</p>
+                    <p class="text-muted">Your equity is tied up in bricks, not sitting ready in an account.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 4 — Greatest Asset of Your 20s</div>
+            <div class="screen theme-dark">
+                <div class="anim-drift delay-1">
+                    <h2>At 24, one underrated asset is mobility.</h2>
+                </div>
+                <div class="visual-box anim-drift delay-2">
+                    <i class="ti ti-rocket"
+                        style="font-size:64px; color:var(--brand-blue); animation: float 3s infinite ease-in-out;"></i>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>The freedom to move cities for a better job, a new industry, or a role you actually want.</p>
+                    <p style="color:#ff6b6b;">A 20-year loan can quietly take that option off the table.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 5 — The Opportunity Cost</div>
+            <div class="screen theme-light">
+                <div class="anim-drift delay-1">
+                    <p>Imagine a great offer lands in a new city — better pay, better role.</p>
+                </div>
+                <div class="visual-box anim-drift delay-2">
+                    <i class="ti ti-briefcase" style="font-size:48px; color:var(--brand-gold);"></i>
+                    <i class="ti ti-link" style="font-size:24px; color:#555; margin:0 8px;"></i>
+                    <i class="ti ti-wall" style="font-size:48px; color:#a83232;"></i>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p style="font-weight:700;">Locked into a 20-year EMI in your hometown?</p>
+                    <p>Walking away from that offer might be the real cost of the house, not just the interest.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 6 — The Reframe</div>
+            <div class="screen theme-accent">
+                <div class="anim-drift delay-1">
+                    <h2>Rent isn't automatically wasted money.</h2>
+                </div>
+                <div class="visual-box anim-drift delay-2">
+                    <i class="ti ti-armchair" style="font-size:64px; color:#444;"></i>
+                    <i class="ti ti-tool"
+                        style="font-size:32px; color:#888; position:absolute; right:40px; top:20px;"></i>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>It's often the price of flexibility — the freedom to leave in 30 days, and the luxury of calling
+                        the landlord instead of a plumber.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 1.5: Screens 7-9 -->
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 7 — The Pivot</div>
+            <div class="screen theme-dark text-center">
+                <div class="anim-drift delay-1 flex-grow"
+                    style="display:flex; flex-direction:column; justify-content:center;">
+                    <h2>Before we go further, let's make this real.</h2>
+                    <p>What's your rent, and what would it cost to buy where you live — or somewhere like it?</p>
+                </div>
+                <div class="anim-drift delay-2" style="width:100%;">
+                    <button class="btn-primary">Let's find out</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 8 — The Input</div>
+            <div class="screen theme-dark">
+                <div class="anim-drift delay-1 flex-grow"
+                    style="display:flex; flex-direction:column; justify-content:center;">
+                    <label style="font-size:12px; font-weight:700; margin-bottom:8px; display:block;">MONTHLY
+                        RENT</label>
+                    <input type="text" class="input-field" placeholder="₹ 25,000">
+
+                    <label
+                        style="font-size:12px; font-weight:700; margin:bottom:8px; margin-top:16px; display:block;">EST.
+                        HOME PRICE</label>
+                    <input type="text" class="input-field" placeholder="₹ 1,00,00,000">
+                </div>
+                <div class="anim-drift delay-2" style="width:100%;">
+                    <button class="btn-primary">Show me both sides</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 9 — The First Numbers</div>
+            <div class="screen theme-light">
+                <div class="anim-drift delay-1">
+                    <p class="text-muted">(Assuming ₹25K rent / ₹1Cr home)</p>
+                </div>
+                <div class="visual-box anim-drift delay-2" style="height:160px;">
+                    <div class="bar" style="--h: 40%; left:60px; background:var(--brand-green);"></div>
+                    <div style="position:absolute; bottom:-25px; left:55px; font-size:10px; font-weight:bold;">₹25K Rent
+                    </div>
+
+                    <div class="bar" style="--h: 90%; right:60px; background:var(--brand-red);"></div>
+                    <div style="position:absolute; bottom:-25px; right:55px; font-size:10px; font-weight:bold;">₹69K EMI
+                    </div>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>Buying needs roughly <strong>₹20 Lakhs upfront</strong>, plus an EMI near ₹69,000/month.</p>
+                    <p>Renting is ₹25,000/month, no lakhs required upfront.</p>
+                    <p class="text-muted" style="text-align:center; margin-top:16px;">Keep scrolling ↓</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 2 (Selected highlights for length & impact: S10, 11, 12, 14, 18, 20, 22, 23) -->
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 10 — EMI = Rent Lie</div>
+            <div class="screen theme-dark text-center">
+                <div class="anim-drift delay-1">
+                    <p style="font-style:italic;">"My rent is ₹25K, my EMI would be ₹35K — I might as well buy!"</p>
+                </div>
+                <div class="visual-box anim-drift delay-2" style="flex-direction:column; justify-content:center;">
+                    <i class="ti ti-mountain" style="font-size:64px; color:#fff;"></i>
+                    <div style="width:100%; height:2px; background:var(--brand-blue); margin:10px 0;"></div>
+                    <p class="text-muted" style="margin:0;">DOWN PAYMENT</p>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>This comparison quietly ignores what's sitting underneath.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 12 — What That Could Do</div>
+            <div class="screen theme-light">
+                <div class="anim-drift delay-1">
+                    <h2>Keep renting, and invest that ₹20 Lakhs instead.</h2>
+                </div>
+                <div class="visual-box anim-drift delay-2">
+                    <i class="ti ti-trending-up" style="font-size:80px; color:var(--brand-green);"></i>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>At a historical index fund average of ~12%, it could grow to roughly <strong>₹1.9 Crores</strong>
+                        over 20 years.</p>
+                    <p class="text-muted" style="font-size:10px;">*Historical average, not a promise. Real returns move
+                        with the market.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 18 — The Real Formula</div>
+            <div class="screen theme-accent">
+                <div class="anim-drift delay-1">
+                    <h2>"Rent + Invest" only works if you actually invest.</h2>
+                </div>
+                <div class="visual-box anim-drift delay-2">
+                    <i class="ti ti-scale" style="font-size:64px; color:#444;"></i>
+                    <i class="ti ti-lock"
+                        style="font-size:24px; position:absolute; right:60px; top:40px; color:var(--brand-green);"></i>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p>Every month, for years, without skipping. If you don't trust yourself to invest the gap, the math
+                        on paper won't match your actual life.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 20 — Your Real Comparison</div>
+            <div class="screen theme-dark">
+                <div class="anim-drift delay-1">
+                    <p class="text-muted">(Assuming ₹25K rent / ₹1Cr home)</p>
+                </div>
+                <div class="visual-box anim-drift delay-2" style="height:140px;">
+                    <div class="bar" style="--h: 55%; left:60px; background:var(--brand-green);"></div>
+                    <div class="bar" style="--h: 95%; right:60px; background:var(--brand-gold);"></div>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p><strong>Rent + Invest:</strong> ~₹1.09 Cr in 15 yrs.</p>
+                    <p><strong>Buy (with tax/appreciation):</strong> ~₹2 Cr in 15 yrs.</p>
+                    <p class="text-muted" style="font-size:12px;">Both build wealth. The real difference is liquidity
+                        now vs. a fixed asset later.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 22 — What Flexibility Buys</div>
+            <div class="screen theme-light">
+                <div class="anim-drift delay-1">
+                    <p>That extra ₹44,000/month could fund:</p>
+                </div>
+                <div class="visual-box anim-drift delay-2"
+                    style="display:grid; grid-template-columns:1fr 1fr; gap:20px; text-align:center;">
+                    <div><i class="ti ti-certificate" style="font-size:32px;"></i>
+                        <p style="font-size:11px; margin-top:8px;">Course</p>
+                    </div>
+                    <div><i class="ti ti-building-store" style="font-size:32px;"></i>
+                        <p style="font-size:11px; margin-top:8px;">Business</p>
+                    </div>
+                    <div><i class="ti ti-backpack" style="font-size:32px;"></i>
+                        <p style="font-size:11px; margin-top:8px;">Travel</p>
+                    </div>
+                    <div><i class="ti ti-plant" style="font-size:32px; color:var(--brand-green);"></i>
+                        <p style="font-size:11px; margin-top:8px;">Portfolio</p>
+                    </div>
+                </div>
+                <div class="anim-drift delay-3" style="margin-top:auto;">
+                    <p style="font-weight:700;">The point isn't the house. It's what the flexibility buys you.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen-wrapper">
+            <div class="screen-label">Screen 23 — Final Action</div>
+            <div class="screen theme-dark text-center">
+                <div class="anim-drift delay-1 flex-grow"
+                    style="display:flex; flex-direction:column; justify-content:center;">
+                    <h2>There's no universally correct answer.</h2>
+                    <p>Flexibility and liquidity matter more right now? Renting is strong. Stability and a 10+ year
+                        commitment matter? So is buying.</p>
+                </div>
+                <div class="anim-drift delay-2" style="width:100%;">
+                    <button class="btn-primary" style="color:#111;">I'll run these numbers for myself</button>
+                    <button class="btn-link">I still want to explore buying</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<h2 class="sr-only">Mobile app screen showing a small coin balancing a much larger boulder on a scale, representing an asymmetric bet where a small monthly payment covers a much larger contractual cost</h2>
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes seesaw { 0%, 100% { transform:rotate(-3deg);} 50% { transform:rotate(3deg);} }
+.seq1 { animation: drift 0.5s ease 0.1s both; }
+.seq2 { animation: drift 0.5s ease 1.4s both; }
+.beam { animation: seesaw 3s ease-in-out 0.6s infinite; transform-origin: center; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0; background:var(--surface-1); border-radius:12px;">
+<div style="width:280px; height:560px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:20px 20px; box-sizing:border-box; display:flex; flex-direction:column;">
+  <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:8px;"><span>9:41</span><i class="ti ti-wifi" aria-hidden="true"></i></div>
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center;">
+
+    <p class="seq1" style="font-size:16px; font-weight:500; margin:0; max-width:225px; line-height:1.5; color:var(--text-primary);">It's an asymmetric bet.</p>
+
+    <div style="position:relative; width:170px; height:100px; display:flex; flex-direction:column; align-items:center;">
+      <div style="width:4px; height:36px; background:var(--border-strong);"></div>
+      <svg class="beam" width="160" height="14" viewBox="0 0 160 14">
+        <line x1="0" y1="7" x2="160" y2="7" stroke="var(--border-strong)" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <div style="position:absolute; top:36px; left:8px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+        <div style="width:16px; height:16px; border-radius:50%; background:var(--text-accent); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-coin" style="font-size:10px; color:var(--on-primary);" aria-hidden="true"></i>
+        </div>
+        <span style="font-size:9px; color:var(--text-muted);">Your fee</span>
+      </div>
+      <div style="position:absolute; top:24px; right:6px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+        <div style="width:36px; height:36px; border-radius:8px; background:var(--text-secondary); opacity:0.85;"></div>
+        <span style="font-size:9px; color:var(--text-muted);">The cost</span>
+      </div>
+    </div>
+
+    <p class="seq2" style="font-size:13.5px; color:var(--text-secondary); margin:0; max-width:225px; line-height:1.6;">The insurer contractually agrees to cover a much larger cost if the covered event happens — as long as your policy is active and the claim fits its terms.</p>
+
+  </div>
+</div>
+</div>

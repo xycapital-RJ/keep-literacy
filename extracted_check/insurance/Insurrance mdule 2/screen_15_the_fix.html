@@ -1,0 +1,27 @@
+<h2 class="sr-only">Mobile app screen showing a wrench tightening a bolt on a steel plate, representing how quick and affordable it is to fix an insurance coverage gap with a basic direct to consumer policy</h2>
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes wrenchTurn { 0%, 100% { transform:rotate(-18deg);} 50% { transform:rotate(8deg);} }
+.seq1 { animation: drift 0.5s ease 0.1s both; }
+.seq2 { animation: drift 0.5s ease 1.4s both; }
+.wrench { animation: wrenchTurn 1.6s ease-in-out 0.6s infinite; transform-origin: 70% 70%; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0; background:var(--surface-1); border-radius:12px;">
+<div style="width:280px; height:560px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:20px 20px; box-sizing:border-box; display:flex; flex-direction:column;">
+  <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:8px;"><span>9:41</span><i class="ti ti-wifi" aria-hidden="true"></i></div>
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center;">
+
+    <p class="seq1" style="font-size:16px; font-weight:500; margin:0; max-width:225px; line-height:1.5; color:var(--text-primary);">Fixing this doesn't take long.</p>
+
+    <div style="position:relative; width:100px; height:90px; display:flex; align-items:center; justify-content:center;">
+      <div style="width:70px; height:50px; border-radius:6px; background:var(--surface-1); border:1.5px solid var(--border-strong);"></div>
+      <i class="ti ti-tools wrench" style="position:absolute; font-size:34px; color:var(--text-accent);" aria-hidden="true"></i>
+    </div>
+
+    <p class="seq2" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:225px; line-height:1.6;">A basic term and health policy at your age is often surprisingly affordable — though the exact cost depends on your age, health, and cover amount. You don't need a premium agent, just a basic, direct-to-consumer policy to plug the gap.</p>
+
+  </div>
+</div>
+</div>

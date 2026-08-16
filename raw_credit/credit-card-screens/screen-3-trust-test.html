@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Screen 3 — The Trust Test</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-body); background:#f0f0ee; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.phone { width:375px; height:780px; background:var(--surface-2); border-radius:40px; border:1px solid var(--border-strong); box-shadow:0 20px 60px rgba(0,0,0,0.12); padding:24px 22px; display:flex; flex-direction:column; }
+.statusbar { display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px; }
+.content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; text-align:center; }
+
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes turnKey { 0% { transform:rotate(-25deg);} 60% { transform:rotate(15deg);} 100% { transform:rotate(0deg);} }
+@keyframes doorOpen { 0% { transform:perspective(220px) rotateY(0deg);} 100% { transform:perspective(220px) rotateY(-16deg);} }
+.k-key { animation: turnKey .8s ease .5s both; transform-origin:70% 50%; display:inline-block; font-size:30px; color:var(--text-accent); position:absolute; left:20px; top:44px; }
+.k-door { animation: doorOpen .8s ease .8s both; transform-origin:left center; width:64px; height:96px; background:var(--surface-1); border:1.5px solid var(--border-strong); border-radius:5px; position:absolute; right:20px; }
+.seq1 { animation: drift .5s ease .1s both; }
+.seq2 { animation: drift .5s ease 1.3s both; }
+.door-wrap { position:relative; width:150px; height:110px; display:flex; align-items:center; justify-content:center; }
+</style></head>
+<body>
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><i class="ti ti-wifi"></i></div>
+  <div class="content">
+    <p class="seq1" style="font-size:17px; font-weight:500; margin:0; max-width:260px; line-height:1.5;">A credit card isn't extra money. It's a trust test.</p>
+    <div class="door-wrap">
+      <div class="k-door"></div>
+      <i class="ti ti-key k-key"></i>
+    </div>
+    <p class="seq2" style="font-size:14px; color:var(--text-secondary); margin:0; max-width:260px; line-height:1.6;">Banks watch how you handle a small amount of borrowed money before they'll ever trust you with a big one — a car loan, a home loan.</p>
+  </div>
+</div>
+</body></html>

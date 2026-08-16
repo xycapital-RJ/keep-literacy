@@ -1,0 +1,31 @@
+/* Design tokens used across all exported screens for this module.
+   Keep these consistent as new screens are added. */
+:root {
+  --surface-2: #FFFFFF;   /* screen background */
+  --surface-1: #F5F5F3;   /* card background */
+  --border: #E5E4DE;
+  --border-strong: #D3D1C7;
+  --border-accent: #A9C7E8;
+
+  --text-primary: #171717;
+  --text-secondary: #5F5E5A;
+  --text-muted: #888780;
+  --text-accent: #0C447C;
+  --text-success: #27500A;
+  --text-warning: #633806;
+  --text-danger: #791F1F;
+  --text-pro: #3C3489;
+
+  --bg-accent: #E6F1FB;
+  --bg-success: #EAF3DE;
+  --bg-warning: #FAEEDA;
+  --bg-danger: #FCEBEB;
+  --bg-pro: #EEEDFE;
+
+  --fill-primary: #171717;
+  --on-primary: #FFFFFF;
+
+  --radius: 10px;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-voice: Georgia, "Times New Roman", serif; /* used only for bare-quote / editorial moments */
+}

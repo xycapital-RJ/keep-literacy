@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Screen 9 — The Pivot</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-body); background:#f0f0ee; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.phone { width:375px; height:780px; background:var(--fill-primary); border-radius:40px; border:1px solid var(--border-strong); box-shadow:0 20px 60px rgba(0,0,0,0.12); padding:24px 22px; display:flex; flex-direction:column; }
+.statusbar { display:flex; justify-content:space-between; font-size:13px; color:var(--on-primary); opacity:.7; margin-bottom:10px; }
+.content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center; }
+
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+.d1 { animation: drift .5s ease .1s both; }
+.d2 { animation: drift .5s ease .35s both; }
+.d3 { animation: drift .5s ease .6s both; }
+button.cta { width:100%; height:54px; border-radius:var(--radius); background:var(--on-primary); color:var(--fill-primary); border:none; font-size:16px; font-weight:600; cursor:pointer; }
+</style></head>
+<body>
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><i class="ti ti-wifi"></i></div>
+  <div class="content">
+    <p class="d1" style="font-size:26px; font-weight:500; line-height:1.4; margin:0; color:var(--on-primary); max-width:270px;">Stop reading for a second.</p>
+    <p class="d2" style="font-size:16px; color:var(--on-primary); opacity:.85; margin:0; max-width:260px; line-height:1.55;">Let's find your number — even if you've never held a credit card in your life.</p>
+  </div>
+  <button class="d3 cta">Let's find out</button>
+</div>
+</body></html>

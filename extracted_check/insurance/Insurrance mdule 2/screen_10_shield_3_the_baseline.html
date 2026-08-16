@@ -1,0 +1,56 @@
+<h2 class="sr-only">Mobile app screen showing a car and laptop marked with a checkmark for worth insuring, next to headphones marked with a red X for not worth insuring, representing object, renters, and auto insurance</h2>
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes checkIn { 0% { opacity:0; transform:scale(0.5);} 60% { transform:scale(1.15);} 100% { opacity:1; transform:scale(1);} }
+@keyframes xIn { 0% { opacity:0; transform:scale(0.5) rotate(-20deg);} 60% { transform:scale(1.15) rotate(0deg);} 100% { opacity:1; transform:scale(1) rotate(0deg);} }
+.seq1 { animation: drift 0.5s ease 0.1s both; }
+.seq2 { animation: drift 0.5s ease 1.4s both; }
+.badge-check { animation: checkIn 0.4s cubic-bezier(.34,1.56,.64,1) 0.6s both; }
+.badge-x { animation: xIn 0.4s cubic-bezier(.34,1.56,.64,1) 0.9s both; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0; background:var(--surface-1); border-radius:12px;">
+<div style="width:280px; height:560px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:20px 20px; box-sizing:border-box; display:flex; flex-direction:column;">
+  <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:8px;"><span>9:41</span><i class="ti ti-wifi" aria-hidden="true"></i></div>
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center;">
+
+    <span style="font-size:11px; font-weight:600; padding:4px 10px; border-radius:8px; background:var(--bg-accent); color:var(--text-accent);">SHIELD 3 &middot; THE BASELINE</span>
+
+    <p class="seq1" style="font-size:15px; font-weight:500; margin:0; max-width:225px; line-height:1.5; color:var(--text-primary);">Don't insure cheap things.</p>
+
+    <div style="display:flex; gap:14px; align-items:flex-start;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <div style="position:relative; width:52px; height:52px; border-radius:10px; background:var(--bg-success); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-car" style="font-size:24px; color:var(--text-success);" aria-hidden="true"></i>
+          <div class="badge-check" style="position:absolute; top:-6px; right:-6px; width:18px; height:18px; border-radius:50%; background:var(--text-success); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-check" style="font-size:11px; color:var(--on-success);" aria-hidden="true"></i>
+          </div>
+        </div>
+        <span style="font-size:10px; color:var(--text-muted);">Car</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <div style="position:relative; width:52px; height:52px; border-radius:10px; background:var(--bg-success); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-device-laptop" style="font-size:24px; color:var(--text-success);" aria-hidden="true"></i>
+          <div class="badge-check" style="position:absolute; top:-6px; right:-6px; width:18px; height:18px; border-radius:50%; background:var(--text-success); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-check" style="font-size:11px; color:var(--on-success);" aria-hidden="true"></i>
+          </div>
+        </div>
+        <span style="font-size:10px; color:var(--text-muted);">Home contents</span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <div style="position:relative; width:52px; height:52px; border-radius:10px; background:var(--bg-danger); display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-headphones" style="font-size:24px; color:var(--text-danger);" aria-hidden="true"></i>
+          <div class="badge-x" style="position:absolute; top:-6px; right:-6px; width:18px; height:18px; border-radius:50%; background:var(--text-danger); display:flex; align-items:center; justify-content:center;">
+            <i class="ti ti-x" style="font-size:11px; color:var(--on-danger);" aria-hidden="true"></i>
+          </div>
+        </div>
+        <span style="font-size:10px; color:var(--text-muted);">Headphones</span>
+      </div>
+    </div>
+
+    <p class="seq2" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:225px; line-height:1.6;">Insure what would actually hurt to replace tomorrow — your car, or your apartment's contents in a fire or theft.</p>
+
+  </div>
+</div>
+</div>

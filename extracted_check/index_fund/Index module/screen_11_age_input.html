@@ -1,0 +1,24 @@
+<h2 class="sr-only">Screen with a number input asking the user how old they are right now, to personalize the compounding projection</h2>
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+.s1 { animation: drift .5s ease .1s both; }
+.s2 { animation: drift .5s ease .35s both; }
+.s3 { animation: drift .5s ease .6s both; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0;">
+<div style="width:270px; height:560px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:22px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; gap:22px; text-align:center;">
+
+  <i class="ti ti-hourglass" style="font-size:28px; color:var(--text-accent); margin:0 auto;" aria-hidden="true"></i>
+
+  <p class="s1" style="font-size:19px; font-weight:500; margin:0;">How old are you right now?</p>
+
+  <div class="s2" style="border:1.5px solid var(--border-accent); border-radius:var(--radius); padding:16px 18px; display:flex; align-items:center; justify-content:center; gap:8px;">
+    <span style="font-family: Georgia, serif; font-size:32px; font-weight:700;">24</span>
+    <span style="width:2px; height:26px; background:var(--text-accent); margin-left:2px;"></span>
+  </div>
+
+  <button class="s3" style="width:100%; height:50px; border-radius:var(--radius); background:var(--fill-primary); color:var(--on-primary); border:none; font-size:15px; font-weight:500; margin-top:8px;">Next</button>
+
+</div>
+</div>

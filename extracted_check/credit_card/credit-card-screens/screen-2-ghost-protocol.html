@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Screen 2 — The Ghost Protocol</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-body); background:#f0f0ee; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.phone { width:375px; height:780px; background:var(--surface-2); border-radius:40px; border:1px solid var(--border-strong); box-shadow:0 20px 60px rgba(0,0,0,0.12); padding:24px 22px; display:flex; flex-direction:column; }
+.statusbar { display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px; }
+.content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center; }
+
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes fadeGhost { 0% { opacity:1;} 100% { opacity:.3;} }
+.g-icon { animation: fadeGhost 2.2s ease-in-out .3s infinite alternate; font-size:48px; color:var(--text-secondary); }
+.seq1 { animation: drift .5s ease .1s both; }
+.seq2 { animation: drift .5s ease .4s both; }
+.seq3 { animation: drift .5s ease .7s both; }
+.seq4 { animation: drift .5s ease 1.0s both; }
+.age-badge { text-align:center; background:var(--surface-1); border-radius:10px; padding:10px 14px; }
+</style></head>
+<body>
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><i class="ti ti-wifi"></i></div>
+  <div class="content">
+    <i class="ti ti-user g-icon"></i>
+    <p class="seq1" style="font-size:17px; font-weight:500; margin:0; max-width:270px; line-height:1.5;">If you only use cash and debit cards, you're financially invisible.</p>
+    <p class="seq2" style="font-size:14.5px; color:var(--text-secondary); margin:0; max-width:270px; line-height:1.55;">To a bank, a 28-year-old with zero credit history reads exactly as risky as an 18-year-old.</p>
+    <div class="seq3" style="display:flex; align-items:center; gap:10px;">
+      <div class="age-badge"><p style="font-size:11px;color:var(--text-muted);margin:0;">age 18</p></div>
+      <i class="ti ti-equal" style="font-size:16px; color:var(--text-muted);"></i>
+      <div class="age-badge"><p style="font-size:11px;color:var(--text-muted);margin:0;">age 28</p></div>
+    </div>
+    <p class="seq4" style="font-size:16px; font-weight:600; margin:0;">You are a ghost.</p>
+  </div>
+</div>
+</body></html>

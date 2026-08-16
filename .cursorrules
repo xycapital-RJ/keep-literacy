@@ -1,0 +1,1 @@
+This is a full-stack monorepo. The backend is NestJS with PostgreSQL and Prisma ORM. The frontend is React Native (Expo) using Reanimated for 60FPS UI interactions. Always enforce SOLID principles. Never use raw SQL; always use Prisma. Write strict TypeScript.

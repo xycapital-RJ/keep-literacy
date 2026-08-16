@@ -1,0 +1,29 @@
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(12px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes popIn { 0% { opacity:0; transform:scale(0.7);} 100% { opacity:1; transform:scale(1);} }
+.s1 { animation: drift .5s ease .1s both; }
+.s2 { animation: popIn .6s cubic-bezier(.3,1.3,.4,1) .35s both; }
+.s3 { animation: drift .5s ease 1.6s both; }
+.s4 { animation: drift .5s ease 2.05s both; }
+.s5 { animation: drift .5s ease 2.5s both; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0;">
+<div style="width:280px; height:580px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:24px 22px; box-sizing:border-box; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; text-align:center;">
+
+  <p class="s1" style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); margin:0;">A fact fund managers don't advertise</p>
+
+  <p class="s2" style="font-family:Georgia,serif; font-size:76px; font-weight:700; line-height:1; margin:0; color:#a83232;">76%</p>
+
+  <p class="s2" style="font-size:13.5px; color:var(--text-secondary); line-height:1.5; margin:0; max-width:230px;">of professional fund managers in India failed to beat a plain index fund over the last 10 years</p>
+
+  <span class="s3" style="display:inline-flex; align-items:center; gap:5px; font-size:10.5px; color:var(--text-muted); background:var(--surface-1); padding:5px 10px; border-radius:100px; margin-top:2px;"><i class="ti ti-chart-bar" style="font-size:11px;"></i> SPIVA India Scorecard, S&P Dow Jones Indices</span>
+
+  <div style="height:14px;"></div>
+
+  <p class="s4" style="font-size:18px; font-weight:700; line-height:1.35; margin:0; max-width:240px;">You're paying full price for someone to lose to a computer.</p>
+
+  <p class="s5" style="font-size:12.5px; color:var(--text-secondary); line-height:1.6; margin:0; max-width:230px;">High-frequency algorithms react faster than any human ever could. If the professionals can't win this game, what makes you think you can from your phone?</p>
+
+</div>
+</div>

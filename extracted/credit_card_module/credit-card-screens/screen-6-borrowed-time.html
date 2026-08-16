@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Screen 6 — Borrowed Time, Not Free Money</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-body); background:#f0f0ee; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.phone { width:375px; height:780px; background:var(--surface-2); border-radius:40px; border:1px solid var(--border-strong); box-shadow:0 20px 60px rgba(0,0,0,0.12); padding:24px 22px; display:flex; flex-direction:column; }
+.statusbar { display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px; }
+.content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; text-align:center; }
+
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes glowPulse { 0%, 100% { opacity:.55;} 50% { opacity:1;} }
+.glow-range { animation: glowPulse 1.8s ease-in-out infinite; position:absolute; inset:0; background:var(--bg-accent); }
+.seq1 { animation: drift .5s ease .1s both; }
+.seq2 { animation: drift .5s ease 1.1s both; }
+.range-wrap { width:180px; }
+</style></head>
+<body>
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><i class="ti ti-wifi"></i></div>
+  <div class="content">
+    <p class="seq1" style="font-size:17px; font-weight:500; margin:0; max-width:260px; line-height:1.5;">This isn't extra cash. It's a 45-day, interest-free loan — if you know the rules.</p>
+    <div class="range-wrap">
+      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); margin-bottom:8px;"><span>swipe</span><span>due date</span></div>
+      <div style="position:relative; height:12px; background:var(--surface-1); border-radius:6px; overflow:hidden;">
+        <div class="glow-range"></div>
+      </div>
+      <p style="font-size:13px; color:var(--text-accent); font-weight:600; margin:8px 0 0;">45 days</p>
+    </div>
+    <p class="seq2" style="font-size:14px; color:var(--text-secondary); margin:0;">That gap is breathing room, not a reward.</p>
+  </div>
+</div>
+</body></html>

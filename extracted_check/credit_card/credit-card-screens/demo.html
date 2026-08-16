@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Credit Card Masterclass — Scroll Demo</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-body); background:#e9e9e6; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding: 30px 12px; }
+.instructions { max-width: 375px; text-align:center; margin-bottom: 14px; color:#666; font-size:13px; }
+.phone { width:375px; height:780px; background:var(--surface-2); border-radius:40px; border:1px solid var(--border-strong); box-shadow:0 20px 60px rgba(0,0,0,0.15); overflow:hidden; position:relative; }
+.statusbar { display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); padding: 16px 22px 6px; position:sticky; top:0; background:transparent; z-index:5; pointer-events:none; }
+.scroller { height:100%; overflow-y:auto; scroll-snap-type: y mandatory; scroll-behavior:smooth; }
+.panel { height:780px; scroll-snap-align:start; display:flex; flex-direction:column; padding: 24px 24px 24px; }
+.panel-dark { background: var(--fill-primary); }
+.panel-dark p, .panel-dark .sub { color: var(--on-primary); }
+.center { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center; }
+.left { flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px; }
+.reveal { opacity:0; transform:translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+button.cta { width:100%; height:50px; border-radius:var(--radius); background:var(--fill-primary); color:var(--on-primary); border:none; font-size:15px; font-weight:600; cursor:pointer; }
+.panel-dark button.cta { background:var(--on-primary); color:var(--fill-primary); }
+.opt { width:100%; text-align:left; height:60px; border-radius:14px; background:var(--surface-1); border:0.5px solid var(--border); padding:0 16px; display:flex; align-items:center; gap:14px; cursor:pointer; font-size:14px; font-weight:500; color:var(--text-primary); font-family:var(--font-body); }
+.opt:hover { border-color: var(--text-accent); }
+.opt i { font-size:19px; }
+.badge { font-size:11px; font-weight:600; padding:5px 9px; border-radius:7px; }
+.quote { font-size:14px; color:var(--text-secondary); font-style:italic; margin:0; max-width:250px; line-height:1.55; }
+.progress-dots { position:absolute; right:10px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:6px; z-index:5; }
+.dot { width:5px; height:5px; border-radius:50%; background:var(--border-strong); }
+.dot.active { background:var(--text-accent); width:6px; height:6px; }
+
+/* screen-specific animations, all namespaced */
+@keyframes s1assemble1 { 0% { transform:translate(-50px,-25px) rotate(-25deg); opacity:0;} 100% { transform:translate(0,0) rotate(0); opacity:1;} }
+@keyframes s1assemble2 { 0% { transform:translate(50px,-18px) rotate(20deg); opacity:0;} 100% { transform:translate(0,0) rotate(0); opacity:1;} }
+@keyframes s1assemble3 { 0% { transform:translate(-36px,32px) rotate(15deg); opacity:0;} 100% { transform:translate(0,0) rotate(0); opacity:1;} }
+@keyframes s1assemble4 { 0% { transform:translate(44px,28px) rotate(-18deg); opacity:0;} 100% { transform:translate(0,0) rotate(0); opacity:1;} }
+.s1pc { position:absolute; width:44px; height:28px; background:var(--surface-1); border:1.5px solid var(--border-strong); border-radius:5px; }
+.in .s1pc1 { animation: s1assemble1 .6s cubic-bezier(.22,1,.36,1) both; }
+.in .s1pc2 { animation: s1assemble2 .6s cubic-bezier(.22,1,.36,1) .08s both; }
+.in .s1pc3 { animation: s1assemble3 .6s cubic-bezier(.22,1,.36,1) .16s both; }
+.in .s1pc4 { animation: s1assemble4 .6s cubic-bezier(.22,1,.36,1) .24s both; }
+
+@keyframes s2fade { 0% { opacity:1;} 100% { opacity:.3;} }
+.s2ghost { animation: s2fade 2.2s ease-in-out .3s infinite alternate; }
+
+@keyframes s3key { 0%,55% { transform:rotate(-25deg);} 100% { transform:rotate(0deg);} }
+@keyframes s3door { 0% { transform:perspective(220px) rotateY(0);} 100% { transform:perspective(220px) rotateY(-16deg);} }
+.s3key { animation: s3key 1.4s ease .5s infinite alternate; transform-origin:70% 50%; display:inline-block; }
+.s3door { animation: s3door 1.4s ease .5s infinite alternate; transform-origin:left center; width:56px; height:82px; background:var(--surface-1); border:1.5px solid var(--border-strong); border-radius:5px; position:absolute; right:16px; }
+
+@keyframes s4fly1 { 0% { transform:translate(0,0); opacity:1;} 100% { transform:translate(-34px,-42px); opacity:0;} }
+@keyframes s4fly2 { 0% { transform:translate(0,0); opacity:1;} 100% { transform:translate(8px,-52px); opacity:0;} }
+@keyframes s4fly3 { 0% { transform:translate(0,0); opacity:1;} 100% { transform:translate(36px,-38px); opacity:0;} }
+.s4c1 { animation: s4fly1 1.2s ease-out .3s infinite; }
+.s4c2 { animation: s4fly2 1.2s ease-out .55s infinite; }
+.s4c3 { animation: s4fly3 1.2s ease-out .8s infinite; }
+
+@keyframes s5arrow { 0% { transform:translateX(-80px); opacity:0;} 55% { opacity:1;} 70% { transform:translateX(6px);} 100% { transform:translateX(-4px); opacity:1;} }
+@keyframes s5flash { 0%,60% { filter:drop-shadow(0 0 0 transparent);} 68% { filter:drop-shadow(0 0 8px var(--text-accent));} 100% { filter:drop-shadow(0 0 0 transparent);} }
+.s5arrow { animation: s5arrow 1.8s cubic-bezier(.3,.7,.4,1) .3s infinite; }
+.s5shield { animation: s5flash 1.8s ease .3s infinite; }
+
+@keyframes s6glow { 0%,100% { opacity:.55;} 50% { opacity:1;} }
+.s6glow { animation: s6glow 1.8s ease-in-out infinite; }
+
+@keyframes s7short { 0% { stroke-dashoffset:140;} 100% { stroke-dashoffset:0;} }
+@keyframes s7loop { 0% { stroke-dashoffset:300;} 100% { stroke-dashoffset:0;} }
+.in .s7short { animation: s7short 1s ease .3s both; }
+.in .s7loop { animation: s7loop 1.6s ease .3s both; }
+
+@keyframes s8unlock { 0%,55% { transform:rotate(0deg);} 100% { transform:rotate(-28deg);} }
+.s8shackle { transform-origin:30% 100%; animation: s8unlock 1.4s ease .6s infinite alternate; }
+</style>
+</head>
+<body>
+
+<p class="instructions">Scroll inside the phone (or swipe on mobile) to move through the module. Tap an option on the branch screen to jump to that path.</p>
+
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><i class="ti ti-wifi"></i></div>
+  <div class="scroller" id="scroller">
+
+    <!-- Screen 1B -->
+    <section class="panel" data-i="1">
+      <div class="left">
+        <p class="reveal" style="font-size:16px; margin:0;">You've seen the ads: cashback, airport lounges, 5X reward points.</p>
+        <div class="reveal" style="background:var(--surface-1); border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge" style="background:var(--bg-warning); color:var(--text-warning);">5X POINTS</span>
+            <span class="badge" style="background:var(--bg-accent); color:var(--text-accent);">LOUNGE ACCESS</span>
+            <span class="badge" style="background:var(--bg-success); color:var(--text-success);">CASHBACK</span>
+          </div>
+          <i class="ti ti-credit-card" style="font-size:34px; color:var(--text-primary);"></i>
+        </div>
+        <div class="reveal" style="background:var(--surface-2); border:1px dashed var(--border-strong); border-radius:12px; padding:12px 14px;">
+          <p style="font-size:12px; color:var(--text-secondary); margin:0; line-height:1.55;">What nobody shows you in that ad: the exact math of how a card can quietly cost <em>you</em> money instead.</p>
+        </div>
+        <p class="reveal" style="font-size:14px; margin:0;">We'll get to the rewards. First — what decides whether you're even allowed to play that game.</p>
+      </div>
+    </section>
+
+    <!-- Screen 2 -->
+    <section class="panel" data-i="2">
+      <div class="center">
+        <i class="ti ti-user s2ghost" style="font-size:40px; color:var(--text-secondary);"></i>
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0; max-width:250px; line-height:1.5;">If you only use cash and debit cards, you're financially invisible.</p>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:250px; line-height:1.55;">To a bank, a 28-year-old with zero credit history reads exactly as risky as an 18-year-old.</p>
+        <div class="reveal" style="display:flex; align-items:center; gap:8px;">
+          <div style="background:var(--surface-1); border-radius:8px; padding:8px 12px;"><p style="font-size:10px;color:var(--text-muted);margin:0;">age 18</p></div>
+          <i class="ti ti-equal" style="font-size:14px; color:var(--text-muted);"></i>
+          <div style="background:var(--surface-1); border-radius:8px; padding:8px 12px;"><p style="font-size:10px;color:var(--text-muted);margin:0;">age 28</p></div>
+        </div>
+        <p class="reveal" style="font-size:15px; font-weight:600; margin:0;">You are a ghost.</p>
+      </div>
+    </section>
+
+    <!-- Screen 3 -->
+    <section class="panel" data-i="3">
+      <div class="center">
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0; max-width:250px;">A credit card isn't extra money. It's a trust test.</p>
+        <div class="reveal" style="position:relative; width:140px; height:100px; display:flex; align-items:center; justify-content:center;">
+          <div class="s3door"></div>
+          <i class="ti ti-key s3key" style="font-size:26px; color:var(--text-accent); position:absolute; left:16px;"></i>
+        </div>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:250px; line-height:1.6;">Banks watch how you handle a small amount of borrowed money before they'll ever trust you with a big one — a car loan, a home loan.</p>
+      </div>
+    </section>
+
+    <!-- Screen 4 -->
+    <section class="panel" data-i="4">
+      <div class="center">
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0; max-width:250px;">Swipe a debit card, and the money leaves your bank instantly.</p>
+        <div class="reveal" style="position:relative; width:100px; height:100px; display:flex; align-items:center; justify-content:center;">
+          <i class="ti ti-building-bank" style="font-size:44px; color:var(--text-secondary);"></i>
+          <i class="ti ti-coin s4c1" style="font-size:16px; color:var(--text-warning); position:absolute;"></i>
+          <i class="ti ti-coin s4c2" style="font-size:16px; color:var(--text-warning); position:absolute;"></i>
+          <i class="ti ti-coin s4c3" style="font-size:16px; color:var(--text-warning); position:absolute;"></i>
+        </div>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:250px; line-height:1.6;">If someone steals your debit card info, they steal your actual cash — you have to fight the bank to get it back.</p>
+      </div>
+    </section>
+
+    <!-- Screen 5 -->
+    <section class="panel" data-i="5">
+      <div class="center">
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0; max-width:250px;">Swipe a credit card, and you're spending the bank's money.</p>
+        <div class="reveal" style="position:relative; width:110px; height:90px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+          <i class="ti ti-shield-check s5shield" style="font-size:46px; color:var(--text-accent); position:absolute; right:16px;"></i>
+          <i class="ti ti-arrow-narrow-right s5arrow" style="font-size:24px; color:var(--text-danger); position:absolute; left:0;"></i>
+        </div>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:250px; line-height:1.6;">If fraud happens, the bank's money is stolen, not yours. They fight to fix it — your checking account stays untouched.</p>
+      </div>
+    </section>
+
+    <!-- Screen 6 -->
+    <section class="panel" data-i="6">
+      <div class="center">
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0; max-width:250px;">This isn't extra cash. It's a 45-day, interest-free loan — if you know the rules.</p>
+        <div class="reveal" style="width:180px;">
+          <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-muted); margin-bottom:8px;"><span>swipe</span><span>due date</span></div>
+          <div style="position:relative; height:11px; background:var(--surface-1); border-radius:6px; overflow:hidden;">
+            <div class="s6glow" style="position:absolute; inset:0; background:var(--bg-accent);"></div>
+          </div>
+          <p style="font-size:12px; color:var(--text-accent); font-weight:600; margin:8px 0 0;">45 days</p>
+        </div>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:0;">That gap is breathing room, not a reward.</p>
+      </div>
+    </section>
+
+    <!-- Screen 7 -->
+    <section class="panel" data-i="7">
+      <div class="center">
+        <div class="reveal" style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <svg width="80" height="26" viewBox="0 0 80 26"><path class="s7short" d="M2 13 H78" stroke="var(--text-success)" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="140"/></svg>
+            <span style="font-size:12px; color:var(--text-success); font-weight:600;">Transactor</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <svg width="80" height="32" viewBox="0 0 80 32"><path class="s7loop" d="M2 16 H44 A11 11 0 1 1 44 17 H78" stroke="var(--text-danger)" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="300"/></svg>
+            <span style="font-size:12px; color:var(--text-danger); font-weight:600;">Revolver</span>
+          </div>
+        </div>
+        <p class="reveal" style="font-size:14.5px; font-weight:500; margin:0; max-width:250px;">Transactors pay their full bill every time — interest-free, always.</p>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:250px; line-height:1.55;">Revolvers carry a balance and quietly fund the bank's profit margin with their own stress.</p>
+      </div>
+    </section>
+
+    <!-- Screen 8 -->
+    <section class="panel" data-i="8">
+      <div class="center">
+        <svg width="54" height="60" viewBox="0 0 50 56" class="reveal">
+          <path class="s8shackle" d="M14 24 V16 A11 11 0 0 1 36 16 V24" stroke="var(--text-primary)" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <rect x="8" y="24" width="34" height="26" rx="5" fill="var(--surface-1)" stroke="var(--text-primary)" stroke-width="2"/>
+        </svg>
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0; max-width:250px;">By the end of this scroll, you'll know exactly how to be a Transactor.</p>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:250px; line-height:1.55;">Including the one number that decides whether you ever pay interest at all.</p>
+      </div>
+      <button class="cta reveal" onclick="jumpTo(9)">Let's calculate yours</button>
+    </section>
+
+    <!-- Screen 9 -->
+    <section class="panel panel-dark" data-i="9">
+      <div class="center">
+        <p class="reveal" style="font-size:24px; font-weight:500; margin:0; max-width:230px;">Stop reading for a second.</p>
+        <p class="reveal sub" style="font-size:14px; opacity:.85; margin:0; max-width:230px; line-height:1.55;">Let's find your number — even if you've never held a credit card in your life.</p>
+      </div>
+      <button class="cta reveal" onclick="jumpTo(10)">Let's find out</button>
+    </section>
+
+    <!-- Screen 10 -->
+    <section class="panel" data-i="10">
+      <div class="left">
+        <p class="reveal" style="font-size:19px; font-weight:500; margin:0 0 4px;">Do you already have a credit card?</p>
+        <button class="opt reveal" onclick="jumpTo('10b')"><i class="ti ti-credit-card" style="color:var(--text-accent);"></i>Yes, I have one</button>
+        <button class="opt reveal" onclick="jumpTo('10c')"><i class="ti ti-wallet" style="color:var(--text-success);"></i>No, but I have income or pocket money</button>
+        <button class="opt reveal" onclick="jumpTo('10a')"><i class="ti ti-hourglass-empty" style="color:var(--text-muted);"></i>No, and I don't have income right now</button>
+      </div>
+      <p style="font-size:11px; color:var(--text-muted); text-align:center; margin:8px 0 0;">Tap an option to jump to that path</p>
+    </section>
+
+    <!-- Screen 10a -->
+    <section class="panel" data-i="10a">
+      <div class="center">
+        <i class="ti ti-mood-smile reveal" style="font-size:30px; color:var(--text-success);"></i>
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0; max-width:230px;">Totally fine — you don't need income to learn this.</p>
+        <div class="reveal" style="background:var(--surface-1); border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:10px; text-align:left;">
+          <i class="ti ti-replace" style="font-size:18px; color:var(--text-accent);"></i>
+          <p style="font-size:12px; color:var(--text-secondary); margin:0; line-height:1.5;">We'll use a placeholder number to show how the math works — swap in your real numbers later.</p>
+        </div>
+      </div>
+      <button class="cta reveal">Show me with an example</button>
+    </section>
+
+    <!-- Screen 10b -->
+    <section class="panel" data-i="10b">
+      <div class="left">
+        <i class="ti ti-credit-card reveal" style="font-size:24px; color:var(--text-accent);"></i>
+        <p class="reveal" style="font-size:18px; font-weight:500; margin:0;">What's your credit limit?</p>
+        <div class="reveal" style="border:1.5px solid var(--border-accent); border-radius:var(--radius); padding:13px 15px; display:flex; align-items:center; gap:8px;">
+          <span style="font-size:19px; color:var(--text-muted);">₹</span><span style="font-size:19px; font-weight:500;">50,000</span>
+        </div>
+        <p class="reveal" style="font-size:11.5px; color:var(--text-muted); margin:0;">Check your card's app or your last statement if you're not sure.</p>
+      </div>
+      <button class="cta reveal">Calculate my number</button>
+    </section>
+
+    <!-- Screen 10c -->
+    <section class="panel" data-i="10c">
+      <div class="left">
+        <i class="ti ti-wallet reveal" style="font-size:24px; color:var(--text-success);"></i>
+        <p class="reveal" style="font-size:16px; font-weight:500; margin:0;">No card yet, no problem.</p>
+        <p class="reveal" style="font-size:13px; color:var(--text-secondary); margin:-6px 0 0;">What's your monthly income right now?</p>
+        <div class="reveal" style="border:1.5px solid var(--border-accent); border-radius:var(--radius); padding:13px 15px; display:flex; align-items:center; gap:8px;">
+          <span style="font-size:19px; color:var(--text-muted);">₹</span><span style="font-size:19px; font-weight:500;">15,000</span>
+        </div>
+        <p class="reveal" style="font-size:11.5px; color:var(--text-muted); margin:0;">Pocket money, salary, freelance — just the total.</p>
+      </div>
+      <button class="cta reveal">Estimate my first limit</button>
+    </section>
+
+  </div>
+</div>
+
+<script>
+function jumpTo(i) {
+  const el = document.querySelector('.panel[data-i="' + i + '"]');
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      const reveals = e.target.querySelectorAll('.reveal');
+      reveals.forEach((el, idx) => setTimeout(() => el.classList.add('in'), idx * 90));
+    } else {
+      e.target.classList.remove('in');
+      e.target.querySelectorAll('.reveal').forEach((el) => el.classList.remove('in'));
+    }
+  });
+}, { root: document.getElementById('scroller'), threshold: 0.55 });
+document.querySelectorAll('.panel').forEach((p) => io.observe(p));
+</script>
+
+</body>
+</html>

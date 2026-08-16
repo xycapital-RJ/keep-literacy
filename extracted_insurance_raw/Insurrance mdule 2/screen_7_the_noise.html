@@ -1,0 +1,44 @@
+<h2 class="sr-only">Mobile app screen showing a laser cutting through a dense web of financial jargon like endowment plans and ULIPs to reveal three glowing icons representing the three shields worth understanding</h2>
+<style>
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes laserSweep { 0%, 25% { opacity:0; transform:translateX(-50px) rotate(20deg);} 45% { opacity:1; transform:translateX(0) rotate(20deg);} 65% { opacity:1; transform:translateX(50px) rotate(20deg);} 100% { opacity:0; transform:translateX(80px) rotate(20deg);} }
+@keyframes jargonFade { 0%, 45% { opacity:0.5;} 60%, 100% { opacity:0.12;} }
+@keyframes shieldsReveal { 0%, 55% { opacity:0; transform:scale(0.6);} 75% { opacity:1; transform:scale(1.1);} 100% { opacity:1; transform:scale(1);} }
+.seq1 { animation: drift 0.5s ease 0.1s both; }
+.seq2 { animation: drift 0.5s ease 1.8s both; }
+.laser { animation: laserSweep 2.8s ease 0.5s infinite; }
+.jargon { animation: jargonFade 2.8s ease 0.5s infinite; }
+.shield-a { animation: shieldsReveal 2.8s ease 0.5s infinite; }
+.shield-b { animation: shieldsReveal 2.8s ease 0.6s infinite; }
+.shield-c { animation: shieldsReveal 2.8s ease 0.7s infinite; }
+</style>
+
+<div style="display:flex; justify-content:center; padding:1rem 0; background:var(--surface-1); border-radius:12px;">
+<div style="width:280px; height:560px; border-radius:28px; border:0.5px solid var(--border-strong); background:var(--surface-2); padding:20px 20px; box-sizing:border-box; display:flex; flex-direction:column;">
+  <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:8px;"><span>9:41</span><i class="ti ti-wifi" aria-hidden="true"></i></div>
+
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center;">
+
+    <p class="seq1" style="font-size:15px; font-weight:500; margin:0; max-width:230px; line-height:1.5; color:var(--text-primary);">The insurance industry sells a lot of complexity.</p>
+
+    <div style="position:relative; width:180px; height:110px; display:flex; align-items:center; justify-content:center;">
+      <div class="jargon" style="position:absolute; display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-width:170px;">
+        <span style="font-size:9px; color:var(--text-muted); padding:3px 6px; border:1px solid var(--border); border-radius:6px;">ULIP</span>
+        <span style="font-size:9px; color:var(--text-muted); padding:3px 6px; border:1px solid var(--border); border-radius:6px;">Endowment</span>
+        <span style="font-size:9px; color:var(--text-muted); padding:3px 6px; border:1px solid var(--border); border-radius:6px;">Whole-life</span>
+        <span style="font-size:9px; color:var(--text-muted); padding:3px 6px; border:1px solid var(--border); border-radius:6px;">Rider bundle</span>
+        <span style="font-size:9px; color:var(--text-muted); padding:3px 6px; border:1px solid var(--border); border-radius:6px;">Money-back</span>
+      </div>
+      <div class="laser" style="position:absolute; width:180px; height:3px; background:var(--text-accent);"></div>
+      <div style="position:absolute; display:flex; gap:10px;">
+        <i class="shield-a ti ti-heartbeat" style="font-size:22px; color:var(--text-accent);" aria-hidden="true"></i>
+        <i class="shield-b ti ti-ghost" style="font-size:22px; color:var(--text-accent);" aria-hidden="true"></i>
+        <i class="shield-c ti ti-car" style="font-size:22px; color:var(--text-accent);" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <p class="seq2" style="font-size:13px; color:var(--text-secondary); margin:0; max-width:225px; line-height:1.6;">Many of these bundle insurance and investing together, and usually do both worse than buying them separately. In your 20s, there are three shields worth understanding first.</p>
+
+  </div>
+</div>
+</div>

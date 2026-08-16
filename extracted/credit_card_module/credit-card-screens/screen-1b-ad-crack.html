@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Screen 1B — The Ad Cracks Open</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family: var(--font-body); background:#f0f0ee; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.phone { width:375px; height:780px; background:var(--surface-2); border-radius:40px; border:1px solid var(--border-strong); box-shadow:0 20px 60px rgba(0,0,0,0.12); padding:24px 22px; display:flex; flex-direction:column; }
+.statusbar { display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:10px; }
+.content { flex:1; display:flex; flex-direction:column; justify-content:center; gap:18px; padding:0 6px; }
+
+@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }
+@keyframes crackReveal { 0% { clip-path: inset(0 0 100% 0);} 100% { clip-path: inset(0 0 0 0);} }
+.f1 { animation: drift .5s ease .1s both; }
+.f2 { animation: drift .5s ease .6s both; }
+.fine { animation: crackReveal .7s cubic-bezier(.22,1,.36,1) .6s both; }
+
+.badge { font-size:12px; font-weight:600; padding:6px 10px; border-radius:8px; }
+.ad-card { background:var(--surface-1); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:12px; }
+.fine-box { background:var(--surface-2); border:1px dashed var(--border-strong); border-radius:12px; padding:14px 16px; margin-top:6px; }
+</style></head>
+<body>
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><i class="ti ti-wifi"></i></div>
+  <div class="content">
+    <p class="f1" style="font-size:17px; margin:0;">You've seen the ads: cashback, airport lounges, 5X reward points.</p>
+    <div class="f1 ad-card">
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="badge" style="background:var(--bg-warning); color:var(--text-warning);">5X POINTS</span>
+        <span class="badge" style="background:var(--bg-accent); color:var(--text-accent);">LOUNGE ACCESS</span>
+        <span class="badge" style="background:var(--bg-success); color:var(--text-success);">CASHBACK</span>
+      </div>
+      <i class="ti ti-credit-card" style="font-size:38px; color:var(--text-primary);"></i>
+    </div>
+    <div class="fine fine-box">
+      <p style="font-size:13.5px; color:var(--text-secondary); margin:0; line-height:1.6;">What nobody shows you in that ad: the exact math of how a card can quietly cost <em>you</em> money instead.</p>
+    </div>
+    <p class="f2" style="font-size:15px; margin:0; line-height:1.55;">We'll get to the rewards. First — the thing that decides whether you're even allowed to play that game.</p>
+  </div>
+</div>
+</body></html>
