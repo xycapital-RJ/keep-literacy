@@ -199,8 +199,14 @@ export function IndexFundsModuleViewer() {
       // --- Dynamic calculation & text updating across timeline & reveal slides (connected to userAge) ---
       const ageVal = userAge && userAge > 0 && userAge < 100 ? userAge : 20;
       const monthlyVal = userContribution && userContribution > 0 ? userContribution : 5000;
-      const targetAgeVal = ageVal >= 40 ? ageVal + 20 : 40;
-      const yearsVal = targetAgeVal - ageVal;
+
+      // Sync to window.__KEEP_STATE__ for unified engine access
+      if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
+      (window as any).__KEEP_STATE__.userAge = ageVal;
+      (window as any).__KEEP_STATE__.userContribution = monthlyVal;
+
+      const targetAgeVal = ageVal + 20;
+      const yearsVal = 20;
       const monthsVal = yearsVal * 12;
 
       const rate = 0.12 / 12; // 12% annual return on Nifty 50
@@ -212,7 +218,7 @@ export function IndexFundsModuleViewer() {
         if (val >= 10000000) {
           return `₹${(val / 10000000).toFixed(2)} Cr`;
         } else if (val >= 100000) {
-          return `₹${(val / 100000).toFixed(1)}L`;
+          return `₹${(val / 100000).toFixed(1)} Lakhs`;
         } else {
           return `₹${Math.round(val).toLocaleString('en-IN')}`;
         }
@@ -227,16 +233,19 @@ export function IndexFundsModuleViewer() {
       // 1. Screen 13: Timeline & Meaningful Pie Chart (idx-s13-timeline)
       if (activeSlide?.slide_id === 'idx-s13-timeline') {
         const titleEl = wrapper.querySelector('#s13-title');
-        if (titleEl) titleEl.textContent = `Let's project this from age ${ageVal} to ${targetAgeVal}.`;
+        if (titleEl) titleEl.textContent = `Let's project your savings from age ${ageVal} to ${targetAgeVal}.`;
 
         const subEl = wrapper.querySelector('#s13-sub');
-        if (subEl) subEl.textContent = `${yearsVal} years of compounding @ 12% p.a.`;
+        if (subEl) subEl.textContent = `20 years of compounding @ 12% p.a. (${formattedMonthly}/mo)`;
+
+        const assumpEl = wrapper.querySelector('#s13-assumption');
+        if (assumpEl) assumpEl.textContent = `⚡ Assuming 12% Annual Interest Rate on ${formattedMonthly}/month`;
 
         const multEl = wrapper.querySelector('#s13-mult');
         if (multEl) multEl.textContent = `${multVal}x`;
 
         const yearsEl = wrapper.querySelector('#s13-years');
-        if (yearsEl) yearsEl.textContent = `${yearsVal} Years`;
+        if (yearsEl) yearsEl.textContent = `20 Years`;
 
         const startAgeEl = wrapper.querySelector('#s13-start-age');
         if (startAgeEl) startAgeEl.textContent = `Age ${ageVal}`;
@@ -248,7 +257,7 @@ export function IndexFundsModuleViewer() {
         if (invEl) invEl.textContent = formattedInvested;
 
         const retEl = wrapper.querySelector('#s13-returns');
-        if (retEl) retEl.textContent = formattedReturns;
+        if (retEl) retEl.textContent = `+${formattedReturns}`;
 
         const targetLbl = wrapper.querySelector('#s13-target-age-lbl');
         if (targetLbl) targetLbl.textContent = `${targetAgeVal}`;

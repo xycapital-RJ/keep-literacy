@@ -161,8 +161,8 @@ function HtmlSlide({ html }: { html: string }) {
       const state = (window as any).__KEEP_STATE__ || {};
       const ageVal = parseFloat(state.userAge) || 20;
       const monthlyVal = parseFloat(state.userContribution) || 5000;
-      const targetAgeVal = ageVal >= 40 ? ageVal + 20 : 40;
-      const yearsVal = targetAgeVal - ageVal;
+      const targetAgeVal = ageVal + 20;
+      const yearsVal = 20;
       const monthsVal = yearsVal * 12;
 
       const rate = 0.12 / 12; // 12% annual return on Nifty 50
@@ -174,7 +174,7 @@ function HtmlSlide({ html }: { html: string }) {
         if (val >= 10000000) {
           return `₹${(val / 10000000).toFixed(2)} Cr`;
         } else if (val >= 100000) {
-          return `₹${(val / 100000).toFixed(1)}L`;
+          return `₹${(val / 100000).toFixed(1)} Lakhs`;
         } else {
           return `₹${Math.round(val).toLocaleString('en-IN')}`;
         }
@@ -183,20 +183,24 @@ function HtmlSlide({ html }: { html: string }) {
       const formattedInvested = formatLakhs(investedVal);
       const formattedProjected = formatLakhs(fvVal);
       const formattedReturns = formatLakhs(gainedVal);
+      const formattedMonthly = `₹${monthlyVal.toLocaleString('en-IN')}`;
       const multVal = (fvVal / investedVal).toFixed(1);
 
       // Update Timeline elements by ID if present
       const titleEl = wrapper.querySelector('#s13-title');
-      if (titleEl) titleEl.textContent = `Let's project your wealth build from age ${ageVal} to ${targetAgeVal}.`;
+      if (titleEl) titleEl.textContent = `Let's project your savings from age ${ageVal} to ${targetAgeVal}.`;
 
       const subEl = wrapper.querySelector('#s13-sub');
-      if (subEl) subEl.textContent = `${yearsVal} years of compounding @ 12% p.a.`;
+      if (subEl) subEl.textContent = `20 years of compounding @ 12% p.a. (${formattedMonthly}/mo)`;
+
+      const assumpEl = wrapper.querySelector('#s13-assumption');
+      if (assumpEl) assumpEl.textContent = `⚡ Assuming 12% Annual Interest Rate on ${formattedMonthly}/month`;
 
       const multEl = wrapper.querySelector('#s13-mult');
       if (multEl) multEl.textContent = `${multVal}x`;
 
       const yearsEl = wrapper.querySelector('#s13-years');
-      if (yearsEl) yearsEl.textContent = `${yearsVal} Years`;
+      if (yearsEl) yearsEl.textContent = `20 Years`;
 
       const startAgeEl = wrapper.querySelector('#s13-start-age');
       if (startAgeEl) startAgeEl.textContent = `Age ${ageVal}`;

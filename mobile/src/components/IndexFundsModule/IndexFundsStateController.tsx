@@ -21,7 +21,7 @@ export interface IndexFundsStateContextType {
 
 const IndexFundsStateContext = createContext<IndexFundsStateContextType | undefined>(undefined);
 
-export const TOTAL_INDEX_FUND_SCREENS = 18;
+export const TOTAL_INDEX_FUND_SCREENS = 16;
 
 export function IndexFundsStateProvider({ children }: { children: React.ReactNode }) {
   const [activeScreenIndex, setActiveScreenIndex] = useState<number>(0);
