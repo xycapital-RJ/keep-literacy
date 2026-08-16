@@ -1,0 +1,240 @@
+// ============================================================
+// schema.prisma
+// Gamified Financial Literacy App
+// Node.js + PostgreSQL + Prisma
+// ============================================================
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum SlideType {
+  TEXT
+  QUIZ
+  VIDEO
+  IMAGE
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+// ============================================================
+// USER
+// ============================================================
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  username      String   @unique
+  passwordHash  String
+  displayName   String?
+  avatarUrl     String?
+
+  // Gamification
+  xp            Int      @default(0)
+  level         Int      @default(1)
+  currentStreak Int      @default(0)
+  longestStreak Int      @default(0)
+  lastActiveAt  DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  enrollments   Enrollment[]
+  progress      UserProgress[]
+  slideAttempts SlideAttempt[]
+
+  @@index([email])
+  @@index([username])
+  @@map("users")
+}
+
+// ============================================================
+// COURSE
+// ============================================================
+
+model Course {
+  id          String     @id @default(uuid())
+  title       String
+  slug        String     @unique
+  description String?
+  imageUrl    String?
+  difficulty  Difficulty @default(BEGINNER)
+  isPublished Boolean    @default(false)
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  modules     Module[]
+  enrollments Enrollment[]
+
+  @@index([slug])
+  @@map("courses")
+}
+
+// ============================================================
+// ENROLLMENT (join table: User <-> Course)
+// ============================================================
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  userId     String
+  courseId   String
+  enrolledAt DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+  @@map("enrollments")
+}
+
+// ============================================================
+// MODULE (belongs to Course)
+// ============================================================
+
+model Module {
+  id          String   @id @default(uuid())
+  courseId    String
+  title       String
+  description String?
+  order       Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+
+  @@unique([courseId, order])
+  @@index([courseId])
+  @@map("modules")
+}
+
+// ============================================================
+// LESSON (belongs to Module)
+// ============================================================
+
+model Lesson {
+  id          String         @id @default(uuid())
+  moduleId    String
+  title       String
+  description String?
+  order       Int            @default(0)
+  xpReward    Int            @default(10)
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  module      Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  slides      Slide[]
+  progress    UserProgress[]
+
+  @@unique([moduleId, order])
+  @@index([moduleId])
+  @@map("lessons")
+}
+
+// ============================================================
+// SLIDE (polymorphic: TEXT / QUIZ / VIDEO / IMAGE)
+// Single-table (discriminator column) approach: nullable
+// type-specific fields, enforced logically by `type`.
+// ============================================================
+
+model Slide {
+  id       String    @id @default(uuid())
+  lessonId String
+  order    Int        @default(0)
+  type     SlideType
+
+  // --- TEXT / VIDEO / IMAGE fields ---
+  title    String?
+  body     String?    // rich text / markdown for TEXT slides
+  mediaUrl String?    // used by VIDEO / IMAGE slides
+
+  // --- QUIZ fields ---
+  question      String?
+  options       Json?    // e.g. ["A", "B", "C", "D"]
+  correctOption Int?     // index into `options`
+  explanation   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  lesson    Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  attempts  SlideAttempt[]
+
+  @@unique([lessonId, order])
+  @@index([lessonId])
+  @@map("slides")
+}
+
+// ============================================================
+// SLIDE ATTEMPT (tracks quiz answers / slide interactions)
+// ============================================================
+
+model SlideAttempt {
+  id            String   @id @default(uuid())
+  userId        String
+  slideId       String
+  selectedOption Int?
+  isCorrect     Boolean?
+  attemptedAt   DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slide Slide @relation(fields: [slideId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([slideId])
+  @@map("slide_attempts")
+}
+
+// ============================================================
+// USER PROGRESS (per-user, per-lesson completion state)
+// ============================================================
+
+model UserProgress {
+  id          String         @id @default(uuid())
+  userId      String
+  lessonId    String
+  status      ProgressStatus @default(NOT_STARTED)
+  score       Int?
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([lessonId])
+  @@map("user_progress")
+}
