@@ -252,10 +252,99 @@ function HtmlSlide({ html }: { html: string }) {
       </style>
     `;
 
-    // ── Interactive JS injected into every HTML slide ──────────────────────────
-    // Detects static "faux-input" display spans and replaces them with real
-    // editable fields. Also activates buttons to compute live results.
-    const interactiveJS = `
+    React.useEffect(() => {
+      if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+
+      const timer = window.setTimeout(() => {
+        const wrapper = document.querySelector('.slide-html-wrapper');
+        if (!wrapper) return;
+
+        const buttons = Array.from(wrapper.querySelectorAll('button, .opt, [role="button"]')) as HTMLElement[];
+        const cleanup: Array<() => void> = [];
+        const dispatchNext = () => window.dispatchEvent(new CustomEvent('keep-navigate-next'));
+
+        buttons.forEach((button) => {
+          button.style.pointerEvents = 'auto';
+          button.style.cursor = 'pointer';
+          button.removeAttribute('disabled');
+
+          const text = (button.textContent || '').trim().toLowerCase();
+          const isChoice = button.classList.contains('opt') || /^(yes|no)$/.test(text) ||
+            text.includes('yes,') || text.includes('no,') || text.includes('have one') ||
+            text.includes('pocket money') || text.includes('no income');
+          const isContinue = button.classList.contains('i-3') || button.classList.contains('seq3') ||
+            button.classList.contains('seq4') || text.includes('next') || text.includes('continue') ||
+            text.includes('analyze') || text.includes('audit') || text.includes('let\'s find out') ||
+            text.includes('start the engine') || text.includes('learn how');
+
+          const handleClick = (event: Event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (isChoice) {
+              const siblings = button.parentElement?.querySelectorAll('button, .opt') || [];
+              siblings.forEach((sibling) => {
+                const element = sibling as HTMLElement;
+                element.classList.remove('keep-btn-selected');
+                element.classList.add('keep-btn-dimmed');
+              });
+              button.classList.remove('keep-btn-dimmed');
+              button.classList.add('keep-btn-selected');
+              const continueButton = wrapper.querySelector('.i-3') as HTMLElement | null;
+              if (continueButton) {
+                continueButton.style.opacity = '1';
+                continueButton.style.pointerEvents = 'auto';
+              }
+              return;
+            }
+
+            if (isContinue || buttons.length === 1) dispatchNext();
+          };
+
+          button.addEventListener('click', handleClick);
+          cleanup.push(() => button.removeEventListener('click', handleClick));
+        });
+
+        wrapper.querySelectorAll('input').forEach((input) => {
+          const field = input as HTMLInputElement;
+          const handleInput = () => {
+            field.value = field.value.replace(/[^0-9.]/g, '');
+          };
+          field.addEventListener('input', handleInput);
+          cleanup.push(() => field.removeEventListener('input', handleInput));
+        });
+
+        (wrapper as HTMLElement).querySelectorAll('div').forEach((div) => {
+          const style = div.getAttribute('style') || '';
+          if (!style.includes('border') || !style.includes('padding') || div.querySelector('input')) return;
+          const valueSpan = Array.from(div.querySelectorAll('span')).find((span) => /[0-9]/.test(span.textContent || ''));
+          if (!valueSpan) return;
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.inputMode = 'numeric';
+          input.className = 'keep-editable-field';
+          input.value = (valueSpan.textContent || '').replace(/,/g, '').trim();
+          input.setAttribute('aria-label', 'Enter a number');
+          input.addEventListener('input', () => {
+            input.value = input.value.replace(/[^0-9.]/g, '');
+          });
+          div.replaceChildren(input);
+          cleanup.push(() => input.remove());
+        });
+
+        return cleanup;
+      }, 100);
+
+      return () => {
+        window.clearTimeout(timer);
+      };
+    }, [html]);
+
+    /* HTML controls are activated in the React effect above because scripts inserted
+       through dangerouslySetInnerHTML do not execute in browsers. */
+    const interactiveJS = ''; 
+    /*
       <script>
       (function() {
         // Run after DOM is ready
@@ -537,6 +626,7 @@ function HtmlSlide({ html }: { html: string }) {
       })();
       </script>
     `;
+    */
 
     const wrappedHtml = `<div class="slide-html-wrapper">${html}</div>${interactiveJS}`;
 
