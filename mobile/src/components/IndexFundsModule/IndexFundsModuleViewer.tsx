@@ -265,21 +265,6 @@ export function IndexFundsModuleViewer() {
         }
       }
 
-      // 2. Screen 14: Compounding Reveal (idx-s14-reveal)
-      if (activeSlide?.slide_id === 'idx-s14-reveal') {
-        const subEl = wrapper.querySelector('#s14-sub');
-        if (subEl) subEl.textContent = `${formattedMonthly}/month · ${yearsVal} years (Age ${ageVal} → ${targetAgeVal})`;
-
-        const invEl = wrapper.querySelector('#s14-invested');
-        if (invEl) invEl.textContent = formattedInvested;
-
-        const retEl = wrapper.querySelector('#s14-returns');
-        if (retEl) retEl.textContent = `+${formattedReturns}`;
-
-        const totEl = wrapper.querySelector('#s14-total');
-        if (totEl) totEl.textContent = formattedProjected;
-      }
-
       // General CTA buttons handler
       const ctaBtn = wrapper.querySelector('button') as HTMLButtonElement;
       if (ctaBtn && activeSlide?.slide_id !== 'idx-s11-age' && activeSlide?.slide_id !== 'idx-s12-contribution') {

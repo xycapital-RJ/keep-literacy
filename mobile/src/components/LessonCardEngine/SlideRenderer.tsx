@@ -70,93 +70,94 @@ function HtmlSlide({ html }: { html: string }) {
       const wrapper = containerRef.current?.querySelector('.slide-html-wrapper') || document.querySelector('.slide-html-wrapper');
       if (!wrapper) return;
 
-      // ── Convert static display boxes (like age "24" or contribution "₹5,000") into real interactive editable inputs ──
-      const displayBoxes = wrapper.querySelectorAll('div');
-      displayBoxes.forEach((div) => {
-        const dEl = div as HTMLElement;
-        if (dEl.getAttribute('data-keep-input-bound') === 'true') return;
+      // ── Convert static display boxes (ONLY ON INPUT SLIDES) ──
+      const wrapperText = (wrapper.textContent || '').toLowerCase();
+      const isInputSlide = wrapperText.includes('how old are you') || wrapperText.includes('realistically') || wrapperText.includes('per month');
 
-        const style = dEl.getAttribute('style') || '';
-        const text = (dEl.textContent || '').trim();
+      if (isInputSlide) {
+        const displayBoxes = wrapper.querySelectorAll('div');
+        displayBoxes.forEach((div) => {
+          const dEl = div as HTMLElement;
+          if (dEl.getAttribute('data-keep-input-bound') === 'true') return;
 
-        // Check if this div is an input container (border-accent or contains numbers like "24")
-        const isInputBox = (
-          (style.includes('border') && (style.includes('border-accent') || style.includes('A9C7E8') || style.includes('radius'))) ||
-          dEl.classList.contains('s2')
-        );
+          const style = dEl.getAttribute('style') || '';
+          const isInputBox = (
+            (style.includes('border') && (style.includes('border-accent') || style.includes('A9C7E8') || style.includes('radius'))) ||
+            dEl.classList.contains('s2')
+          );
 
-        if (!isInputBox) return;
+          if (!isInputBox) return;
 
-        const spans = dEl.querySelectorAll('span');
-        if (spans.length === 0) return;
+          const spans = dEl.querySelectorAll('span');
+          if (spans.length === 0) return;
 
-        let numSpan: HTMLElement | null = null;
-        let prefixText = '';
+          let numSpan: HTMLElement | null = null;
+          let prefixText = '';
 
-        spans.forEach((sp) => {
-          const sText = (sp.textContent || '').trim();
-          if (sText.includes('₹') || sText.includes('$')) {
-            prefixText = sText;
+          spans.forEach((sp) => {
+            const sText = (sp.textContent || '').trim();
+            if (sText.includes('₹') || sText.includes('$')) {
+              prefixText = sText;
+            }
+            if (/[0-9]/.test(sText)) {
+              numSpan = sp as HTMLElement;
+            }
+          });
+
+          if (!numSpan) return;
+          dEl.setAttribute('data-keep-input-bound', 'true');
+
+          const initialVal = ((numSpan as HTMLElement).textContent || '').replace(/,/g, '').trim() || '24';
+
+          dEl.innerHTML = '';
+          dEl.style.cursor = 'text';
+          dEl.style.border = '2px solid var(--text-accent, #0C447C)';
+          dEl.style.background = '#FFFFFF';
+          dEl.style.padding = '12px 18px';
+          dEl.style.gap = '8px';
+          dEl.style.display = 'flex';
+          dEl.style.alignItems = 'center';
+          dEl.style.justifyContent = 'center';
+
+          if (prefixText) {
+            const pEl = document.createElement('span');
+            pEl.textContent = prefixText;
+            pEl.style.fontSize = '24px';
+            pEl.style.fontWeight = '700';
+            pEl.style.color = 'var(--text-muted, #888780)';
+            dEl.appendChild(pEl);
           }
-          if (/[0-9]/.test(sText)) {
-            numSpan = sp as HTMLElement;
-          }
+
+          const inputEl = document.createElement('input');
+          inputEl.type = 'number';
+          inputEl.inputMode = 'numeric';
+          inputEl.pattern = '[0-9]*';
+          inputEl.value = initialVal;
+          inputEl.style.fontSize = '28px';
+          inputEl.style.fontWeight = '700';
+          inputEl.style.fontFamily = 'Georgia, serif';
+          inputEl.style.color = 'var(--text-primary, #171717)';
+          inputEl.style.border = 'none';
+          inputEl.style.outline = 'none';
+          inputEl.style.background = 'transparent';
+          inputEl.style.width = '100px';
+          inputEl.style.textAlign = 'center';
+
+          inputEl.oninput = (e: Event) => {
+            const val = (e.target as HTMLInputElement).value;
+            if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
+            if (prefixText.includes('₹') || prefixText.includes('$') || initialVal.length > 2) {
+              (window as any).__KEEP_STATE__.userContribution = val;
+            } else {
+              (window as any).__KEEP_STATE__.userAge = val;
+            }
+          };
+
+          dEl.appendChild(inputEl);
         });
+      }
 
-        if (!numSpan) return;
-        dEl.setAttribute('data-keep-input-bound', 'true');
-
-        const initialVal = ((numSpan as HTMLElement).textContent || '').replace(/,/g, '').trim() || '24';
-
-        // Clear existing static spans inside the box
-        dEl.innerHTML = '';
-        dEl.style.cursor = 'text';
-        dEl.style.border = '2px solid var(--text-accent, #0C447C)';
-        dEl.style.background = '#FFFFFF';
-        dEl.style.padding = '12px 18px';
-        dEl.style.gap = '8px';
-        dEl.style.display = 'flex';
-        dEl.style.alignItems = 'center';
-        dEl.style.justifyContent = 'center';
-
-        if (prefixText) {
-          const pEl = document.createElement('span');
-          pEl.textContent = prefixText;
-          pEl.style.fontSize = '24px';
-          pEl.style.fontWeight = '700';
-          pEl.style.color = 'var(--text-muted, #888780)';
-          dEl.appendChild(pEl);
-        }
-
-        const inputEl = document.createElement('input');
-        inputEl.type = 'number';
-        inputEl.inputMode = 'numeric';
-        inputEl.pattern = '[0-9]*';
-        inputEl.value = initialVal;
-        inputEl.style.fontSize = '28px';
-        inputEl.style.fontWeight = '700';
-        inputEl.style.fontFamily = 'Georgia, serif';
-        inputEl.style.color = 'var(--text-primary, #171717)';
-        inputEl.style.border = 'none';
-        inputEl.style.outline = 'none';
-        inputEl.style.background = 'transparent';
-        inputEl.style.width = '100px';
-        inputEl.style.textAlign = 'center';
-
-        inputEl.oninput = (e: Event) => {
-          const val = (e.target as HTMLInputElement).value;
-          if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
-          if (prefixText.includes('₹') || prefixText.includes('$') || initialVal.length > 2) {
-            (window as any).__KEEP_STATE__.userContribution = val;
-          } else {
-            (window as any).__KEEP_STATE__.userAge = val;
-          }
-        };
-
-        dEl.appendChild(inputEl);
-      });
-
-      // ── Dynamic Compounding Calculation across connected slides (13, 14, 15) ──
+      // ── Dynamic Compounding Calculation for Timeline & Pie Chart (Slide 13) ──
       const state = (window as any).__KEEP_STATE__ || {};
       const ageVal = parseFloat(state.userAge) || 20;
       const monthlyVal = parseFloat(state.userContribution) || 5000;
@@ -167,6 +168,7 @@ function HtmlSlide({ html }: { html: string }) {
       const rate = 0.12 / 12; // 12% annual return on Nifty 50
       const fvVal = monthlyVal * ((Math.pow(1 + rate, monthsVal) - 1) / rate) * (1 + rate);
       const investedVal = monthlyVal * monthsVal;
+      const gainedVal = fvVal - investedVal;
 
       const formatLakhs = (val: number) => {
         if (val >= 10000000) {
@@ -180,44 +182,46 @@ function HtmlSlide({ html }: { html: string }) {
 
       const formattedInvested = formatLakhs(investedVal);
       const formattedProjected = formatLakhs(fvVal);
-      const formattedMonthly = `₹${monthlyVal.toLocaleString('en-IN')}`;
+      const formattedReturns = formatLakhs(gainedVal);
+      const multVal = (fvVal / investedVal).toFixed(1);
 
-      // Update Timeline slide
-      const pHeading = wrapper.querySelector('p.s1') || wrapper.querySelector('p');
-      if (pHeading && (pHeading.textContent || '').includes("project")) {
-        pHeading.textContent = `Let's project this from age ${ageVal} to ${targetAgeVal}.`;
+      // Update Timeline elements by ID if present
+      const titleEl = wrapper.querySelector('#s13-title');
+      if (titleEl) titleEl.textContent = `Let's project your wealth build from age ${ageVal} to ${targetAgeVal}.`;
+
+      const subEl = wrapper.querySelector('#s13-sub');
+      if (subEl) subEl.textContent = `${yearsVal} years of compounding @ 12% p.a.`;
+
+      const multEl = wrapper.querySelector('#s13-mult');
+      if (multEl) multEl.textContent = `${multVal}x`;
+
+      const yearsEl = wrapper.querySelector('#s13-years');
+      if (yearsEl) yearsEl.textContent = `${yearsVal} Years`;
+
+      const startAgeEl = wrapper.querySelector('#s13-start-age');
+      if (startAgeEl) startAgeEl.textContent = `Age ${ageVal}`;
+
+      const endAgeEl = wrapper.querySelector('#s13-end-age');
+      if (endAgeEl) endAgeEl.textContent = `Age ${targetAgeVal}`;
+
+      const invEl = wrapper.querySelector('#s13-invested');
+      if (invEl) invEl.textContent = formattedInvested;
+
+      const retEl = wrapper.querySelector('#s13-returns');
+      if (retEl) retEl.textContent = `+${formattedReturns}`;
+
+      const targetLbl = wrapper.querySelector('#s13-target-age-lbl');
+      if (targetLbl) targetLbl.textContent = `${targetAgeVal}`;
+
+      const totEl = wrapper.querySelector('#s13-total');
+      if (totEl) totEl.textContent = formattedProjected;
+
+      const returnsCircle = wrapper.querySelector('.donut-returns');
+      if (returnsCircle) {
+        const returnsRatio = gainedVal / fvVal;
+        const arcLength = Math.round(returnsRatio * 238);
+        (returnsCircle as HTMLElement).style.strokeDasharray = `${arcLength} 251`;
       }
-      const yearsP = wrapper.querySelector('p.s2');
-      if (yearsP && (yearsP.textContent || '').includes('year')) {
-        yearsP.textContent = `${yearsVal} years of compounding`;
-      }
-
-      // Update Timeline dials
-      const dialDivs = wrapper.querySelectorAll('div');
-      dialDivs.forEach((d) => {
-        const text = (d.textContent || '').trim();
-        if (text === '24') d.textContent = `${ageVal}`;
-        if (text === '40') d.textContent = `${targetAgeVal}`;
-      });
-
-      // Update Reveal slide
-      const subHead = wrapper.querySelector('p.s1') || wrapper.querySelector('p[style*="12.5px"]');
-      if (subHead && (subHead.textContent || '').includes('/month')) {
-        subHead.textContent = `${formattedMonthly}/month · ${yearsVal} years (Age ${ageVal} → ${targetAgeVal})`;
-      }
-
-      const rows = wrapper.querySelectorAll('div[style*="justify-content:space-between"]');
-      rows.forEach((r) => {
-        const rText = r.textContent || '';
-        if (rText.includes('Total invested')) {
-          const valSpan = r.children[1] as HTMLElement;
-          if (valSpan) valSpan.textContent = formattedInvested;
-        }
-        if (rText.includes('Projected value')) {
-          const valSpan = r.children[1] as HTMLElement;
-          if (valSpan) valSpan.textContent = formattedProjected;
-        }
-      });
 
       const buttons = wrapper.querySelectorAll('button, .opt, [role="button"]');
       buttons.forEach((btn) => {
