@@ -98,40 +98,60 @@ export function IndexFundsModuleViewer() {
         return;
       }
 
+      // --- Convert static display boxes to interactive input elements ---
+      const staticBox = wrapper.querySelector('.s2, div[style*="border"]');
+      if (staticBox && !staticBox.querySelector('input')) {
+        const span = staticBox.querySelector('span');
+        const defaultVal = span ? span.textContent?.replace(/[^0-9]/g, '') : '';
+        const initialVal = defaultVal || (activeSlide?.slide_id === 'idx-s11-age' ? '24' : '5000');
+
+        staticBox.innerHTML = '';
+        (staticBox as HTMLElement).style.display = 'flex';
+        (staticBox as HTMLElement).style.alignItems = 'center';
+        (staticBox as HTMLElement).style.justifyContent = 'center';
+
+        const inp = document.createElement('input');
+        inp.type = 'number';
+        inp.inputMode = 'numeric';
+        inp.value = initialVal;
+        inp.style.fontSize = '28px';
+        inp.style.fontWeight = '700';
+        inp.style.fontFamily = 'Georgia, serif';
+        inp.style.border = 'none';
+        inp.style.outline = 'none';
+        inp.style.background = 'transparent';
+        inp.style.textAlign = 'center';
+        inp.style.width = '120px';
+        inp.style.color = 'var(--text-primary, #171717)';
+
+        staticBox.appendChild(inp);
+      }
+
       // --- Screen 11: Age Input (Slide index 11, slide_id idx-s11-age) ---
       if (activeSlide?.slide_id === 'idx-s11-age') {
         const input = wrapper.querySelector('input') as HTMLInputElement;
         const continueBtn = wrapper.querySelector('button') as HTMLButtonElement;
 
-        if (continueBtn) {
-          const updateBtnGuard = (val: string) => {
-            const num = parseFloat(val.replace(/,/g, ''));
-            if (!isNaN(num) && num > 0 && num < 120) {
-              continueBtn.style.opacity = '1';
-              continueBtn.style.pointerEvents = 'auto';
-              continueBtn.style.cursor = 'pointer';
-            } else {
-              continueBtn.style.opacity = '0.35';
-              continueBtn.style.pointerEvents = 'none';
-              continueBtn.style.cursor = 'not-allowed';
-            }
+        if (input && !userAge) {
+          const num = parseFloat(input.value);
+          if (!isNaN(num)) setUserAge(num);
+        }
+
+        if (input) {
+          input.oninput = (e) => {
+            const target = e.target as HTMLInputElement;
+            const num = parseFloat(target.value);
+            if (!isNaN(num)) setUserAge(num);
           };
+        }
 
-          if (input) {
-            updateBtnGuard(input.value || '');
-            input.oninput = (e) => {
-              const target = e.target as HTMLInputElement;
-              const clean = target.value.replace(/[^0-9]/g, '');
-              target.value = clean;
-              const num = parseFloat(clean);
-              if (!isNaN(num)) setUserAge(num);
-              updateBtnGuard(clean);
-            };
-          }
-
+        if (continueBtn) {
+          continueBtn.style.opacity = '1';
+          continueBtn.style.pointerEvents = 'auto';
+          continueBtn.style.cursor = 'pointer';
           continueBtn.onclick = (e) => {
             e.preventDefault();
-            if (userAge) goToNext();
+            goToNext();
           };
         }
       }
@@ -142,35 +162,26 @@ export function IndexFundsModuleViewer() {
         const continueBtn = wrapper.querySelector('button') as HTMLButtonElement;
         const dontKnowBtn = wrapper.querySelector('.dont-know, button:nth-of-type(2)') as HTMLButtonElement;
 
-        if (continueBtn) {
-          const updateBtnGuard = (val: string) => {
-            const num = parseFloat(val.replace(/,/g, ''));
-            if (!isNaN(num) && num > 0) {
-              continueBtn.style.opacity = '1';
-              continueBtn.style.pointerEvents = 'auto';
-              continueBtn.style.cursor = 'pointer';
-            } else {
-              continueBtn.style.opacity = '0.35';
-              continueBtn.style.pointerEvents = 'none';
-              continueBtn.style.cursor = 'not-allowed';
-            }
+        if (input && !userContribution) {
+          const num = parseFloat(input.value);
+          if (!isNaN(num)) setUserContribution(num);
+        }
+
+        if (input) {
+          input.oninput = (e) => {
+            const target = e.target as HTMLInputElement;
+            const num = parseFloat(target.value);
+            if (!isNaN(num)) setUserContribution(num);
           };
+        }
 
-          if (input) {
-            updateBtnGuard(input.value || '');
-            input.oninput = (e) => {
-              const target = e.target as HTMLInputElement;
-              const clean = target.value.replace(/[^0-9]/g, '');
-              target.value = clean;
-              const num = parseFloat(clean);
-              if (!isNaN(num)) setUserContribution(num);
-              updateBtnGuard(clean);
-            };
-          }
-
+        if (continueBtn) {
+          continueBtn.style.opacity = '1';
+          continueBtn.style.pointerEvents = 'auto';
+          continueBtn.style.cursor = 'pointer';
           continueBtn.onclick = (e) => {
             e.preventDefault();
-            if (userContribution) goToNext();
+            goToNext();
           };
         }
 

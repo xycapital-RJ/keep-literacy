@@ -70,6 +70,88 @@ function HtmlSlide({ html }: { html: string }) {
       const wrapper = containerRef.current?.querySelector('.slide-html-wrapper') || document.querySelector('.slide-html-wrapper');
       if (!wrapper) return;
 
+      // ── Convert static display boxes (like age "24" or contribution "₹5,000") into real interactive editable inputs ──
+      const displayBoxes = wrapper.querySelectorAll('div');
+      displayBoxes.forEach((div) => {
+        const dEl = div as HTMLElement;
+        if (dEl.getAttribute('data-keep-input-bound') === 'true') return;
+
+        const style = dEl.getAttribute('style') || '';
+        const text = (dEl.textContent || '').trim();
+
+        // Check if this div is an input container (border-accent or contains numbers like "24")
+        const isInputBox = (
+          (style.includes('border') && (style.includes('border-accent') || style.includes('A9C7E8') || style.includes('radius'))) ||
+          dEl.classList.contains('s2')
+        );
+
+        if (!isInputBox) return;
+
+        const spans = dEl.querySelectorAll('span');
+        if (spans.length === 0) return;
+
+        let numSpan: HTMLElement | null = null;
+        let prefixText = '';
+
+        spans.forEach((sp) => {
+          const sText = (sp.textContent || '').trim();
+          if (sText.includes('₹') || sText.includes('$')) {
+            prefixText = sText;
+          }
+          if (/[0-9]/.test(sText)) {
+            numSpan = sp as HTMLElement;
+          }
+        });
+
+        if (!numSpan) return;
+        dEl.setAttribute('data-keep-input-bound', 'true');
+
+        const initialVal = ((numSpan as HTMLElement).textContent || '').replace(/,/g, '').trim() || '24';
+
+        // Clear existing static spans inside the box
+        dEl.innerHTML = '';
+        dEl.style.cursor = 'text';
+        dEl.style.border = '2px solid var(--text-accent, #0C447C)';
+        dEl.style.background = '#FFFFFF';
+        dEl.style.padding = '12px 18px';
+        dEl.style.gap = '8px';
+        dEl.style.display = 'flex';
+        dEl.style.alignItems = 'center';
+        dEl.style.justifyContent = 'center';
+
+        if (prefixText) {
+          const pEl = document.createElement('span');
+          pEl.textContent = prefixText;
+          pEl.style.fontSize = '24px';
+          pEl.style.fontWeight = '700';
+          pEl.style.color = 'var(--text-muted, #888780)';
+          dEl.appendChild(pEl);
+        }
+
+        const inputEl = document.createElement('input');
+        inputEl.type = 'number';
+        inputEl.inputMode = 'numeric';
+        inputEl.pattern = '[0-9]*';
+        inputEl.value = initialVal;
+        inputEl.style.fontSize = '28px';
+        inputEl.style.fontWeight = '700';
+        inputEl.style.fontFamily = 'Georgia, serif';
+        inputEl.style.color = 'var(--text-primary, #171717)';
+        inputEl.style.border = 'none';
+        inputEl.style.outline = 'none';
+        inputEl.style.background = 'transparent';
+        inputEl.style.width = '100px';
+        inputEl.style.textAlign = 'center';
+
+        inputEl.oninput = (e: Event) => {
+          const val = (e.target as HTMLInputElement).value;
+          if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
+          (window as any).__KEEP_STATE__.userAge = val;
+        };
+
+        dEl.appendChild(inputEl);
+      });
+
       const buttons = wrapper.querySelectorAll('button, .opt, [role="button"]');
       buttons.forEach((btn) => {
         const el = btn as HTMLElement;
