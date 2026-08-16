@@ -99,13 +99,13 @@ export function IndexFundsModuleViewer() {
       }
 
       // --- Convert static display boxes to interactive input elements (ONLY ON INPUT SLIDES) ---
-      const isInputSlide = activeSlide?.slide_id === 'idx-s11-age' || activeSlide?.slide_id === 'idx-s12-contribution';
+      const isInputSlide = activeSlide?.slide_id === 'idx-s10-pivot' || activeSlide?.slide_id === 'idx-s11-age';
       if (isInputSlide) {
         const staticBox = wrapper.querySelector('.s2, div[style*="border"]');
         if (staticBox && !staticBox.querySelector('input')) {
           const span = staticBox.querySelector('span');
           const defaultVal = span ? span.textContent?.replace(/[^0-9]/g, '') : '';
-          const initialVal = defaultVal || (activeSlide?.slide_id === 'idx-s11-age' ? '24' : '5000');
+          const initialVal = defaultVal || (activeSlide?.slide_id === 'idx-s10-pivot' ? '24' : '5000');
 
           staticBox.innerHTML = '';
           (staticBox as HTMLElement).style.display = 'flex';
@@ -130,8 +130,8 @@ export function IndexFundsModuleViewer() {
         }
       }
 
-      // --- Screen 11: Age Input (Slide index 11, slide_id idx-s11-age) ---
-      if (activeSlide?.slide_id === 'idx-s11-age') {
+      // --- Screen 11: Age Input (Slide index 11, slide_id idx-s10-pivot) ---
+      if (activeSlide?.slide_id === 'idx-s10-pivot') {
         const input = wrapper.querySelector('input') as HTMLInputElement;
         const continueBtn = wrapper.querySelector('button') as HTMLButtonElement;
 
@@ -159,8 +159,8 @@ export function IndexFundsModuleViewer() {
         }
       }
 
-      // --- Screen 12: Contribution Input (Slide index 12, slide_id idx-s12-contribution) ---
-      if (activeSlide?.slide_id === 'idx-s12-contribution') {
+      // --- Screen 12: Contribution Input (Slide index 12, slide_id idx-s11-age) ---
+      if (activeSlide?.slide_id === 'idx-s11-age') {
         const input = wrapper.querySelector('input') as HTMLInputElement;
         const continueBtn = wrapper.querySelector('button') as HTMLButtonElement;
         const dontKnowBtn = wrapper.querySelector('.dont-know, button:nth-of-type(2)') as HTMLButtonElement;
@@ -276,7 +276,7 @@ export function IndexFundsModuleViewer() {
 
       // General CTA buttons handler
       const ctaBtn = wrapper.querySelector('button') as HTMLButtonElement;
-      if (ctaBtn && activeSlide?.slide_id !== 'idx-s11-age' && activeSlide?.slide_id !== 'idx-s12-contribution') {
+      if (ctaBtn && activeSlide?.slide_id !== 'idx-s10-pivot' && activeSlide?.slide_id !== 'idx-s11-age') {
         ctaBtn.onclick = (e) => {
           e.preventDefault();
           goToNext();
