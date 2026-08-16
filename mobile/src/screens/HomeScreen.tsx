@@ -33,7 +33,7 @@ interface FeatureIconItem {
   targetTitle?: string;
 }
 
-const FEATURE_HUB_ITEMS: FeatureIconItem[] = [
+const MODULE_ITEMS: FeatureIconItem[] = [
   {
     id: 'feat-credit-card',
     icon: '💳',
@@ -54,6 +54,19 @@ const FEATURE_HUB_ITEMS: FeatureIconItem[] = [
     targetId: 'lesson-index-funds',
     targetTitle: 'Index Funds: The Boring Wealth Engine',
   },
+  {
+    id: 'feat-course-101',
+    icon: '🛡️',
+    title: 'Insurance Risk Shield',
+    subtitle: 'Risk transfer & health emergency protection',
+    tag: 'DEFENSE',
+    actionType: 'LESSON',
+    targetId: 'lesson-insurance-basics',
+    targetTitle: 'Insurance Basics & Risk Shields',
+  },
+];
+
+const REAL_WORLD_ITEMS: FeatureIconItem[] = [
   {
     id: 'feat-scen-cc',
     icon: '🎯',
@@ -80,16 +93,6 @@ const FEATURE_HUB_ITEMS: FeatureIconItem[] = [
     tag: 'BUDGET',
     actionType: 'SCENARIO',
     targetId: 'scen-inflation-budget',
-  },
-  {
-    id: 'feat-course-101',
-    icon: '🛡️',
-    title: 'Insurance Risk Shield',
-    subtitle: 'Risk transfer & health emergency protection',
-    tag: 'DEFENSE',
-    actionType: 'LESSON',
-    targetId: 'lesson-insurance-basics',
-    targetTitle: 'Insurance Basics & Risk Shields',
   },
 ];
 
@@ -124,37 +127,71 @@ export function HomeScreen({ navigation, user, token, onLogout }: Props) {
         </Pressable>
       </View>
 
-      {/* Feature Hub Grid Title */}
-      <View style={s.sectionHeaderRow}>
-        <View>
-          <Text style={s.sectionTitle}>EXPLORE FEATURES & SIMULATORS</Text>
-          <Text style={s.sectionSubtitle}>Tap any feature icon to enter and explore</Text>
+      {/* Main 2-Column Section: Modules on Left, Real-World Problems on Right */}
+      <View style={s.twoColumnContainer}>
+        {/* LEFT COLUMN: MASTERY MODULES */}
+        <View style={s.columnBlock}>
+          <View style={s.columnHeaderRow}>
+            <Text style={s.columnSectionTitle}>📚 MASTERY MODULES</Text>
+            <Text style={s.columnSectionSub}>Core learning paths</Text>
+          </View>
+
+          <View style={s.columnItemsStack}>
+            {MODULE_ITEMS.map((item) => (
+              <Pressable
+                key={item.id}
+                style={({ pressed }) => [s.iconTile, pressed && s.iconTilePressed]}
+                onPress={() => handleFeaturePress(item)}
+              >
+                <View style={s.iconTileHeader}>
+                  <View style={s.tileEmojiBg}>
+                    <Text style={s.tileEmoji}>{item.icon}</Text>
+                  </View>
+                  <Text style={s.tileTag}>{item.tag}</Text>
+                </View>
+
+                <Text style={s.tileTitle}>{item.title}</Text>
+                <Text style={s.tileSub} numberOfLines={2}>{item.subtitle}</Text>
+
+                <View style={s.tileFooter}>
+                  <Text style={s.tileCta}>Start Module →</Text>
+                </View>
+              </Pressable>
+            ))}
+          </View>
         </View>
-      </View>
 
-      {/* Feature Icon Grid */}
-      <View style={s.iconGrid}>
-        {FEATURE_HUB_ITEMS.map((item) => (
-          <Pressable
-            key={item.id}
-            style={({ pressed }) => [s.iconTile, pressed && s.iconTilePressed]}
-            onPress={() => handleFeaturePress(item)}
-          >
-            <View style={s.iconTileHeader}>
-              <View style={s.tileEmojiBg}>
-                <Text style={s.tileEmoji}>{item.icon}</Text>
-              </View>
-              <Text style={s.tileTag}>{item.tag}</Text>
-            </View>
+        {/* RIGHT COLUMN: REAL-WORLD PROBLEMS */}
+        <View style={s.columnBlock}>
+          <View style={s.columnHeaderRow}>
+            <Text style={s.columnSectionTitle}>⚡ REAL-WORLD SOLVERS</Text>
+            <Text style={s.columnSectionSub}>Interactive dilemma tools</Text>
+          </View>
 
-            <Text style={s.tileTitle}>{item.title}</Text>
-            <Text style={s.tileSub} numberOfLines={2}>{item.subtitle}</Text>
+          <View style={s.columnItemsStack}>
+            {REAL_WORLD_ITEMS.map((item) => (
+              <Pressable
+                key={item.id}
+                style={({ pressed }) => [s.iconTile, pressed && s.iconTilePressed]}
+                onPress={() => handleFeaturePress(item)}
+              >
+                <View style={s.iconTileHeader}>
+                  <View style={s.tileEmojiBg}>
+                    <Text style={s.tileEmoji}>{item.icon}</Text>
+                  </View>
+                  <Text style={s.tileTag}>{item.tag}</Text>
+                </View>
 
-            <View style={s.tileFooter}>
-              <Text style={s.tileCta}>Launch Feature →</Text>
-            </View>
-          </Pressable>
-        ))}
+                <Text style={s.tileTitle}>{item.title}</Text>
+                <Text style={s.tileSub} numberOfLines={2}>{item.subtitle}</Text>
+
+                <View style={s.tileFooter}>
+                  <Text style={s.tileCta}>Solve Problem →</Text>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        </View>
       </View>
 
       {/* Real World Problems Section Header */}
@@ -195,8 +232,6 @@ export function HomeScreen({ navigation, user, token, onLogout }: Props) {
     </View>
   );
 
-
-
   return (
     <SafeAreaView style={s.root} edges={['top']}>
       <ScrollView
@@ -205,7 +240,6 @@ export function HomeScreen({ navigation, user, token, onLogout }: Props) {
       >
         {renderHeader()}
       </ScrollView>
-
     </SafeAreaView>
   );
 }
@@ -258,6 +292,33 @@ const s = StyleSheet.create({
     fontSize: 18,
   },
 
+  twoColumnContainer: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: Space.xl,
+  },
+  columnBlock: {
+    flex: 1,
+    gap: 12,
+  },
+  columnHeaderRow: {
+    marginBottom: 4,
+  },
+  columnSectionTitle: {
+    fontSize: 11,
+    fontWeight: Font.extrabold,
+    color: Colors.white,
+    letterSpacing: 1.2,
+  },
+  columnSectionSub: {
+    fontSize: 10,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
+  columnItemsStack: {
+    gap: 12,
+  },
+
   sectionHeaderRow: {
     marginBottom: Space.md,
   },
@@ -272,14 +333,8 @@ const s = StyleSheet.create({
     color: Colors.textMuted,
     marginTop: 2,
   },
-  iconGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: Space.xl,
-  },
   iconTile: {
-    width: '48%',
+    width: '100%',
     backgroundColor: Colors.surfaceCard,
     borderRadius: Radius.lg,
     padding: Space.md,
