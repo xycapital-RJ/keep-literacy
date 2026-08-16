@@ -98,33 +98,36 @@ export function IndexFundsModuleViewer() {
         return;
       }
 
-      // --- Convert static display boxes to interactive input elements ---
-      const staticBox = wrapper.querySelector('.s2, div[style*="border"]');
-      if (staticBox && !staticBox.querySelector('input')) {
-        const span = staticBox.querySelector('span');
-        const defaultVal = span ? span.textContent?.replace(/[^0-9]/g, '') : '';
-        const initialVal = defaultVal || (activeSlide?.slide_id === 'idx-s11-age' ? '24' : '5000');
+      // --- Convert static display boxes to interactive input elements (ONLY ON INPUT SLIDES) ---
+      const isInputSlide = activeSlide?.slide_id === 'idx-s11-age' || activeSlide?.slide_id === 'idx-s12-contribution';
+      if (isInputSlide) {
+        const staticBox = wrapper.querySelector('.s2, div[style*="border"]');
+        if (staticBox && !staticBox.querySelector('input')) {
+          const span = staticBox.querySelector('span');
+          const defaultVal = span ? span.textContent?.replace(/[^0-9]/g, '') : '';
+          const initialVal = defaultVal || (activeSlide?.slide_id === 'idx-s11-age' ? '24' : '5000');
 
-        staticBox.innerHTML = '';
-        (staticBox as HTMLElement).style.display = 'flex';
-        (staticBox as HTMLElement).style.alignItems = 'center';
-        (staticBox as HTMLElement).style.justifyContent = 'center';
+          staticBox.innerHTML = '';
+          (staticBox as HTMLElement).style.display = 'flex';
+          (staticBox as HTMLElement).style.alignItems = 'center';
+          (staticBox as HTMLElement).style.justifyContent = 'center';
 
-        const inp = document.createElement('input');
-        inp.type = 'number';
-        inp.inputMode = 'numeric';
-        inp.value = initialVal;
-        inp.style.fontSize = '28px';
-        inp.style.fontWeight = '700';
-        inp.style.fontFamily = 'Georgia, serif';
-        inp.style.border = 'none';
-        inp.style.outline = 'none';
-        inp.style.background = 'transparent';
-        inp.style.textAlign = 'center';
-        inp.style.width = '120px';
-        inp.style.color = 'var(--text-primary, #171717)';
+          const inp = document.createElement('input');
+          inp.type = 'number';
+          inp.inputMode = 'numeric';
+          inp.value = initialVal;
+          inp.style.fontSize = '28px';
+          inp.style.fontWeight = '700';
+          inp.style.fontFamily = 'Georgia, serif';
+          inp.style.border = 'none';
+          inp.style.outline = 'none';
+          inp.style.background = 'transparent';
+          inp.style.textAlign = 'center';
+          inp.style.width = '120px';
+          inp.style.color = 'var(--text-primary, #171717)';
 
-        staticBox.appendChild(inp);
+          staticBox.appendChild(inp);
+        }
       }
 
       // --- Screen 11: Age Input (Slide index 11, slide_id idx-s11-age) ---
@@ -217,47 +220,64 @@ export function IndexFundsModuleViewer() {
 
       const formattedInvested = formatLakhs(investedVal);
       const formattedProjected = formatLakhs(fvVal);
+      const formattedReturns = formatLakhs(gainedVal);
       const formattedMonthly = `₹${monthlyVal.toLocaleString('en-IN')}`;
+      const multVal = (fvVal / investedVal).toFixed(1);
 
-      // 1. Screen 13: Timeline (idx-s13-timeline)
+      // 1. Screen 13: Timeline & Meaningful Pie Chart (idx-s13-timeline)
       if (activeSlide?.slide_id === 'idx-s13-timeline') {
-        const pHeading = wrapper.querySelector('p.s1') || wrapper.querySelector('p');
-        if (pHeading && (pHeading.textContent || '').includes("project")) {
-          pHeading.textContent = `Let's project this from age ${ageVal} to ${targetAgeVal}.`;
-        }
+        const titleEl = wrapper.querySelector('#s13-title');
+        if (titleEl) titleEl.textContent = `Let's project this from age ${ageVal} to ${targetAgeVal}.`;
 
-        const yearsP = wrapper.querySelector('p.s2');
-        if (yearsP) {
-          yearsP.textContent = `${yearsVal} years of compounding`;
-        }
+        const subEl = wrapper.querySelector('#s13-sub');
+        if (subEl) subEl.textContent = `${yearsVal} years of compounding @ 12% p.a.`;
 
-        const dialDivs = wrapper.querySelectorAll('div');
-        dialDivs.forEach((d) => {
-          const text = (d.textContent || '').trim();
-          if (text === '24') d.textContent = `${ageVal}`;
-          if (text === '40') d.textContent = `${targetAgeVal}`;
-        });
+        const multEl = wrapper.querySelector('#s13-mult');
+        if (multEl) multEl.textContent = `${multVal}x`;
+
+        const yearsEl = wrapper.querySelector('#s13-years');
+        if (yearsEl) yearsEl.textContent = `${yearsVal} Years`;
+
+        const startAgeEl = wrapper.querySelector('#s13-start-age');
+        if (startAgeEl) startAgeEl.textContent = `Age ${ageVal}`;
+
+        const endAgeEl = wrapper.querySelector('#s13-end-age');
+        if (endAgeEl) endAgeEl.textContent = `Age ${targetAgeVal}`;
+
+        const invEl = wrapper.querySelector('#s13-invested');
+        if (invEl) invEl.textContent = formattedInvested;
+
+        const retEl = wrapper.querySelector('#s13-returns');
+        if (retEl) retEl.textContent = formattedReturns;
+
+        const targetLbl = wrapper.querySelector('#s13-target-age-lbl');
+        if (targetLbl) targetLbl.textContent = `${targetAgeVal}`;
+
+        const totEl = wrapper.querySelector('#s13-total');
+        if (totEl) totEl.textContent = formattedProjected;
+
+        // Dynamic Pie SVG Slice Arc adjustment
+        const returnsCircle = wrapper.querySelector('.donut-returns');
+        if (returnsCircle) {
+          const returnsRatio = gainedVal / fvVal; // e.g. ~0.76
+          const arcLength = Math.round(returnsRatio * 238); // 238 is approx 95% arc
+          (returnsCircle as HTMLElement).style.strokeDasharray = `${arcLength} 251`;
+        }
       }
 
       // 2. Screen 14: Compounding Reveal (idx-s14-reveal)
       if (activeSlide?.slide_id === 'idx-s14-reveal') {
-        const subHead = wrapper.querySelector('p.s1') || wrapper.querySelector('p[style*="12.5px"]');
-        if (subHead) {
-          subHead.textContent = `${formattedMonthly}/month · ${yearsVal} years (Age ${ageVal} → ${targetAgeVal})`;
-        }
+        const subEl = wrapper.querySelector('#s14-sub');
+        if (subEl) subEl.textContent = `${formattedMonthly}/month · ${yearsVal} years (Age ${ageVal} → ${targetAgeVal})`;
 
-        const rows = wrapper.querySelectorAll('div[style*="justify-content:space-between"]');
-        rows.forEach((r) => {
-          const rText = r.textContent || '';
-          if (rText.includes('Total invested')) {
-            const valSpan = r.children[1] as HTMLElement;
-            if (valSpan) valSpan.textContent = formattedInvested;
-          }
-          if (rText.includes('Projected value')) {
-            const valSpan = r.children[1] as HTMLElement;
-            if (valSpan) valSpan.textContent = formattedProjected;
-          }
-        });
+        const invEl = wrapper.querySelector('#s14-invested');
+        if (invEl) invEl.textContent = formattedInvested;
+
+        const retEl = wrapper.querySelector('#s14-returns');
+        if (retEl) retEl.textContent = `+${formattedReturns}`;
+
+        const totEl = wrapper.querySelector('#s14-total');
+        if (totEl) totEl.textContent = formattedProjected;
       }
 
       // General CTA buttons handler
