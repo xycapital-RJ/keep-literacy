@@ -85,18 +85,6 @@
     },
     {
       "slide_number": 13,
-      "slide_id": "cc-s10a-no-income",
-      "description": "Screen 10A — No Income Route",
-      "html": "<style>\n@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }\n.n1 { animation: drift .5s ease .1s both; }\n.n2 { animation: drift .5s ease .4s both; }\n.n3 { animation: drift .5s ease .7s both; }\n</style>\n<div style=\"width:100%; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center; background:var(--surface-2, #FFFFFF); color:var(--text-primary, #171717); padding:28px 24px; box-sizing:border-box;\">\n  <div style=\"font-size:48px; margin-bottom:4px;\">😊</div>\n  <p class=\"n1\" style=\"font-size:20px; font-weight:700; margin:0; max-width:260px; line-height:1.4; color:var(--text-primary, #171717);\">\n    Totally fine — you don't need income to learn this.\n  </p>\n  <div class=\"n2\" style=\"background:var(--surface-1, #F5F5F3); border-radius:16px; padding:16px 20px; display:flex; align-items:center; gap:14px; text-align:left; border:1px solid var(--border, #E5E4DE); max-width:280px;\">\n    <span style=\"font-size:24px;\">💡</span>\n    <p style=\"font-size:13.5px; color:var(--text-secondary, #5F5E5A); margin:0; line-height:1.5;\">\n      We'll use a placeholder number to show how the math works — swap in your real numbers later.\n    </p>\n  </div>\n  <button class=\"n3 cta\" style=\"width:100%; max-width:280px; height:54px; border-radius:14px; background:var(--text-primary, #171717); color:#FFFFFF; border:none; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px;\">\n    Show me with an example →\n  </button>\n</div>"
-    },
-    {
-      "slide_number": 14,
-      "slide_id": "cc-s10c-no-card-yet",
-      "description": "Screen 10C — No Card Yet Route",
-      "html": "<style>\n@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }\n.j1 { animation: drift .5s ease .1s both; }\n.j2 { animation: drift .5s ease .4s both; }\n.j3 { animation: drift .5s ease .7s both; }\n</style>\n<div style=\"width:100%; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center; background:var(--surface-2, #FFFFFF); color:var(--text-primary, #171717); padding:28px 24px; box-sizing:border-box;\">\n  <div style=\"font-size:48px; margin-bottom:4px;\">👛</div>\n  <p class=\"j1\" style=\"font-size:20px; font-weight:700; margin:0; line-height:1.4; color:var(--text-primary, #171717);\">\n    No card yet, no problem.\n  </p>\n  <p class=\"j1\" style=\"font-size:14.5px; color:var(--text-secondary, #5F5E5A); margin:-10px 0 0;\">\n    What's your monthly income right now?\n  </p>\n\n  <div class=\"j2\" style=\"border:2px solid var(--text-accent, #0C447C); border-radius:14px; padding:12px 20px; display:flex; align-items:center; gap:10px; background:#FFFFFF; width:100%; max-width:240px; justify-content:center;\">\n    <span style=\"font-size:24px; color:var(--text-muted, #888780); font-weight:700;\">₹</span>\n    <input type=\"number\" value=\"15000\" style=\"font-size:26px; font-weight:700; font-family:Georgia,serif; border:none; outline:none; background:transparent; width:120px; text-align:center; color:var(--text-primary, #171717);\" />\n  </div>\n\n  <p class=\"j3\" style=\"font-size:12.5px; color:var(--text-muted, #888780); margin:0;\">\n    Pocket money, salary, freelance — just the total.\n  </p>\n\n  <button class=\"j3 cta\" style=\"width:100%; max-width:280px; height:54px; border-radius:14px; background:var(--text-primary, #171717); color:#FFFFFF; border:none; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px;\">\n    Estimate my first limit →\n  </button>\n</div>"
-    },
-    {
-      "slide_number": 15,
       "slide_id": "cc-quiz-2",
       "description": "MCQ: Safest way to pay online",
       "type": "QUIZ",
@@ -109,12 +97,6 @@
       ],
       "correctOption": 2,
       "explanation": "With a credit card, if fraud happens the bank's money is stolen, not yours. Your checking account stays untouched while the bank resolves it."
-    },
-    {
-      "slide_number": 16,
-      "slide_id": "cc-s10b-yes-input",
-      "description": "Screen 10B — Credit Limit Input",
-      "html": "<style>\n@keyframes drift { 0% { opacity:0; transform:translateY(14px);} 100% { opacity:1; transform:translateY(0);} }\n.i1 { animation: drift .5s ease .1s both; }\n.i2 { animation: drift .5s ease .4s both; }\n.i3 { animation: drift .5s ease .7s both; }\n</style>\n<div style=\"width:100%; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center; background:var(--surface-2, #FFFFFF); color:var(--text-primary, #171717); padding:28px 24px; box-sizing:border-box;\">\n  <div style=\"font-size:48px; margin-bottom:4px;\">💳</div>\n  <p class=\"i1\" style=\"font-size:22px; font-weight:700; margin:0; color:var(--text-primary, #171717);\">\n    What's your credit limit?\n  </p>\n\n  <div class=\"i2\" style=\"border:2px solid var(--text-accent, #0C447C); border-radius:14px; padding:12px 20px; display:flex; align-items:center; gap:10px; background:#FFFFFF; width:100%; max-width:240px; justify-content:center;\">\n    <span style=\"font-size:24px; color:var(--text-muted, #888780); font-weight:700;\">₹</span>\n    <input type=\"number\" value=\"50000\" style=\"font-size:26px; font-weight:700; font-family:Georgia,serif; border:none; outline:none; background:transparent; width:120px; text-align:center; color:var(--text-primary, #171717);\" />\n  </div>\n\n  <p class=\"i3\" style=\"font-size:12.5px; color:var(--text-muted, #888780); margin:0; max-width:240px; line-height:1.4;\">\n    Check your card's app or your last statement if you're not sure.\n  </p>\n\n  <button class=\"i3 cta\" style=\"width:100%; max-width:280px; height:54px; border-radius:14px; background:var(--text-primary, #171717); color:#FFFFFF; border:none; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px;\">\n    Calculate my number →\n  </button>\n</div>"
     }
   ]
 }

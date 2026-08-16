@@ -91,7 +91,7 @@ export function CreditCardModuleViewer() {
       return found?.html || '';
     }
 
-    // Sequence screens map (Screen 1 to 11 in main sequence)
+    // Sequence screens map (13 slides total)
     const seqSlideIdMap = [
       'cc-s1a-script',
       'cc-s1b-ad-crack',
@@ -102,8 +102,10 @@ export function CreditCardModuleViewer() {
       'cc-s6-borrowed-time',
       'cc-s7-two-users',
       'cc-s8-goal',
+      'cc-quiz-1',
       'cc-s9-pivot',
       'cc-s10-branch',
+      'cc-quiz-2',
     ];
 
     const targetId = seqSlideIdMap[activeScreenIndex];
