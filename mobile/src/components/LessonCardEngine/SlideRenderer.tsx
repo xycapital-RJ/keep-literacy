@@ -71,8 +71,7 @@ function HtmlSlide({ html }: { html: string }) {
       if (!wrapper) return;
 
       // ── Convert static display boxes (ONLY ON INPUT SLIDES) ──
-      const wrapperText = (wrapper.textContent || '').toLowerCase();
-      const isInputSlide = wrapperText.includes('how old are you') || wrapperText.includes('realistically') || wrapperText.includes('per month');
+      const isInputSlide = false;
 
       if (isInputSlide) {
         const displayBoxes = wrapper.querySelectorAll('div');
