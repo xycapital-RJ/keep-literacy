@@ -193,6 +193,73 @@ export function IndexFundsModuleViewer() {
         }
       }
 
+      // --- Dynamic calculation & text updating across timeline & reveal slides (connected to userAge) ---
+      const ageVal = userAge && userAge > 0 && userAge < 100 ? userAge : 20;
+      const monthlyVal = userContribution && userContribution > 0 ? userContribution : 5000;
+      const targetAgeVal = ageVal >= 40 ? ageVal + 20 : 40;
+      const yearsVal = targetAgeVal - ageVal;
+      const monthsVal = yearsVal * 12;
+
+      const rate = 0.12 / 12; // 12% annual return on Nifty 50
+      const fvVal = monthlyVal * ((Math.pow(1 + rate, monthsVal) - 1) / rate) * (1 + rate);
+      const investedVal = monthlyVal * monthsVal;
+      const gainedVal = fvVal - investedVal;
+
+      const formatLakhs = (val: number) => {
+        if (val >= 10000000) {
+          return `₹${(val / 10000000).toFixed(2)} Cr`;
+        } else if (val >= 100000) {
+          return `₹${(val / 100000).toFixed(1)}L`;
+        } else {
+          return `₹${Math.round(val).toLocaleString('en-IN')}`;
+        }
+      };
+
+      const formattedInvested = formatLakhs(investedVal);
+      const formattedProjected = formatLakhs(fvVal);
+      const formattedMonthly = `₹${monthlyVal.toLocaleString('en-IN')}`;
+
+      // 1. Screen 13: Timeline (idx-s13-timeline)
+      if (activeSlide?.slide_id === 'idx-s13-timeline') {
+        const pHeading = wrapper.querySelector('p.s1') || wrapper.querySelector('p');
+        if (pHeading && (pHeading.textContent || '').includes("project")) {
+          pHeading.textContent = `Let's project this from age ${ageVal} to ${targetAgeVal}.`;
+        }
+
+        const yearsP = wrapper.querySelector('p.s2');
+        if (yearsP) {
+          yearsP.textContent = `${yearsVal} years of compounding`;
+        }
+
+        const dialDivs = wrapper.querySelectorAll('div');
+        dialDivs.forEach((d) => {
+          const text = (d.textContent || '').trim();
+          if (text === '24') d.textContent = `${ageVal}`;
+          if (text === '40') d.textContent = `${targetAgeVal}`;
+        });
+      }
+
+      // 2. Screen 14: Compounding Reveal (idx-s14-reveal)
+      if (activeSlide?.slide_id === 'idx-s14-reveal') {
+        const subHead = wrapper.querySelector('p.s1') || wrapper.querySelector('p[style*="12.5px"]');
+        if (subHead) {
+          subHead.textContent = `${formattedMonthly}/month · ${yearsVal} years (Age ${ageVal} → ${targetAgeVal})`;
+        }
+
+        const rows = wrapper.querySelectorAll('div[style*="justify-content:space-between"]');
+        rows.forEach((r) => {
+          const rText = r.textContent || '';
+          if (rText.includes('Total invested')) {
+            const valSpan = r.children[1] as HTMLElement;
+            if (valSpan) valSpan.textContent = formattedInvested;
+          }
+          if (rText.includes('Projected value')) {
+            const valSpan = r.children[1] as HTMLElement;
+            if (valSpan) valSpan.textContent = formattedProjected;
+          }
+        });
+      }
+
       // General CTA buttons handler
       const ctaBtn = wrapper.querySelector('button') as HTMLButtonElement;
       if (ctaBtn && activeSlide?.slide_id !== 'idx-s11-age' && activeSlide?.slide_id !== 'idx-s12-contribution') {

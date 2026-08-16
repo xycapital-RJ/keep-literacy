@@ -146,10 +146,77 @@ function HtmlSlide({ html }: { html: string }) {
         inputEl.oninput = (e: Event) => {
           const val = (e.target as HTMLInputElement).value;
           if (!(window as any).__KEEP_STATE__) (window as any).__KEEP_STATE__ = {};
-          (window as any).__KEEP_STATE__.userAge = val;
+          if (prefixText.includes('₹') || prefixText.includes('$') || initialVal.length > 2) {
+            (window as any).__KEEP_STATE__.userContribution = val;
+          } else {
+            (window as any).__KEEP_STATE__.userAge = val;
+          }
         };
 
         dEl.appendChild(inputEl);
+      });
+
+      // ── Dynamic Compounding Calculation across connected slides (13, 14, 15) ──
+      const state = (window as any).__KEEP_STATE__ || {};
+      const ageVal = parseFloat(state.userAge) || 20;
+      const monthlyVal = parseFloat(state.userContribution) || 5000;
+      const targetAgeVal = ageVal >= 40 ? ageVal + 20 : 40;
+      const yearsVal = targetAgeVal - ageVal;
+      const monthsVal = yearsVal * 12;
+
+      const rate = 0.12 / 12; // 12% annual return on Nifty 50
+      const fvVal = monthlyVal * ((Math.pow(1 + rate, monthsVal) - 1) / rate) * (1 + rate);
+      const investedVal = monthlyVal * monthsVal;
+
+      const formatLakhs = (val: number) => {
+        if (val >= 10000000) {
+          return `₹${(val / 10000000).toFixed(2)} Cr`;
+        } else if (val >= 100000) {
+          return `₹${(val / 100000).toFixed(1)}L`;
+        } else {
+          return `₹${Math.round(val).toLocaleString('en-IN')}`;
+        }
+      };
+
+      const formattedInvested = formatLakhs(investedVal);
+      const formattedProjected = formatLakhs(fvVal);
+      const formattedMonthly = `₹${monthlyVal.toLocaleString('en-IN')}`;
+
+      // Update Timeline slide
+      const pHeading = wrapper.querySelector('p.s1') || wrapper.querySelector('p');
+      if (pHeading && (pHeading.textContent || '').includes("project")) {
+        pHeading.textContent = `Let's project this from age ${ageVal} to ${targetAgeVal}.`;
+      }
+      const yearsP = wrapper.querySelector('p.s2');
+      if (yearsP && (yearsP.textContent || '').includes('year')) {
+        yearsP.textContent = `${yearsVal} years of compounding`;
+      }
+
+      // Update Timeline dials
+      const dialDivs = wrapper.querySelectorAll('div');
+      dialDivs.forEach((d) => {
+        const text = (d.textContent || '').trim();
+        if (text === '24') d.textContent = `${ageVal}`;
+        if (text === '40') d.textContent = `${targetAgeVal}`;
+      });
+
+      // Update Reveal slide
+      const subHead = wrapper.querySelector('p.s1') || wrapper.querySelector('p[style*="12.5px"]');
+      if (subHead && (subHead.textContent || '').includes('/month')) {
+        subHead.textContent = `${formattedMonthly}/month · ${yearsVal} years (Age ${ageVal} → ${targetAgeVal})`;
+      }
+
+      const rows = wrapper.querySelectorAll('div[style*="justify-content:space-between"]');
+      rows.forEach((r) => {
+        const rText = r.textContent || '';
+        if (rText.includes('Total invested')) {
+          const valSpan = r.children[1] as HTMLElement;
+          if (valSpan) valSpan.textContent = formattedInvested;
+        }
+        if (rText.includes('Projected value')) {
+          const valSpan = r.children[1] as HTMLElement;
+          if (valSpan) valSpan.textContent = formattedProjected;
+        }
       });
 
       const buttons = wrapper.querySelectorAll('button, .opt, [role="button"]');
