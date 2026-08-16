@@ -166,13 +166,14 @@ export function CreditCardModuleViewer() {
               const val = parseFloat(input.value.replace(/,/g, ''));
               if (!isNaN(val)) setUserCreditLimit(val);
             }
+            goToNext();
           };
         }
       }
 
-      // General CTA buttons handler
+      // General CTA buttons handler for all other slides and branch slides
       const ctaBtn = wrapper.querySelector('button.cta, button') as HTMLButtonElement;
-      if (ctaBtn && activeScreenIndex < 10 && !selectedBranch) {
+      if (ctaBtn && (activeScreenIndex !== 10 || selectedBranch)) {
         ctaBtn.onclick = (e) => {
           e.preventDefault();
           goToNext();
