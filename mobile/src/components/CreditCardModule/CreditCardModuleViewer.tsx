@@ -122,60 +122,60 @@ export function CreditCardModuleViewer() {
       const wrapper = document.querySelector('.slide-html-wrapper');
       if (!wrapper) return;
 
-      // --- Screen 10 Branching Setup ---
-      if (activeScreenIndex === 10 && !selectedBranch) {
-        const options = wrapper.querySelectorAll('.opt, button');
-        if (options.length >= 3) {
-          const optYes = options[0] as HTMLButtonElement;      // Yes, I have one -> 10b
-          const optIncome = options[1] as HTMLButtonElement;   // No, but I have income -> 10c
-          const optNoIncome = options[2] as HTMLButtonElement; // No, and I don't have income -> 10a
+      // --- Slide 12 Choice Option Handlers ("Do you already have a credit card?") ---
+      const optYes = wrapper.querySelector('#opt-yes') as HTMLButtonElement;
+      const optNo1 = wrapper.querySelector('#opt-no1') as HTMLButtonElement;
+      const optNo2 = wrapper.querySelector('#opt-no2') as HTMLButtonElement;
+      const feedback = wrapper.querySelector('#feedback-result') as HTMLDivElement;
 
-          optYes.onclick = (e) => {
-            e.preventDefault();
-            optYes.className = 'opt opt-selected';
-            optIncome.className = 'opt opt-dimmed';
-            optNoIncome.className = 'opt opt-dimmed';
-            setTimeout(() => selectBranch('10b-yes-input'), 300);
-          };
-
-          optIncome.onclick = (e) => {
-            e.preventDefault();
-            optIncome.className = 'opt opt-selected';
-            optYes.className = 'opt opt-dimmed';
-            optNoIncome.className = 'opt opt-dimmed';
-            setTimeout(() => selectBranch('10c-no-card-yet'), 300);
-          };
-
-          optNoIncome.onclick = (e) => {
-            e.preventDefault();
-            optNoIncome.className = 'opt opt-selected';
-            optYes.className = 'opt opt-dimmed';
-            optIncome.className = 'opt opt-dimmed';
-            setTimeout(() => selectBranch('10a-no-income'), 300);
-          };
-        }
+      if (optYes && feedback) {
+        optYes.onclick = (e) => {
+          e.preventDefault();
+          optYes.className = 'opt opt-yes-selected';
+          if (optNo1) optNo1.className = 'opt opt-dimmed';
+          if (optNo2) optNo2.className = 'opt opt-dimmed';
+          feedback.innerHTML = `
+            <div class="feedback-box" style="background:#EAF3DE; border:1.5px solid #27500A; color:#27500A;">
+              <p style="font-size:16px; font-weight:700; margin:0 0 4px;">🎉 Great!</p>
+              <p style="font-size:13px; margin:0; opacity:0.9;">Having a credit card gives you a head start to build your credit score properly.</p>
+            </div>
+          `;
+        };
       }
 
-      // --- Screen 10B (Credit Limit Input) ---
-      if (selectedBranch === '10b-yes-input') {
-        const calcBtn = wrapper.querySelector('button') as HTMLButtonElement;
-        const input = wrapper.querySelector('input') as HTMLInputElement;
-
-        if (calcBtn) {
-          calcBtn.onclick = (e) => {
-            e.preventDefault();
-            if (input && input.value) {
-              const val = parseFloat(input.value.replace(/,/g, ''));
-              if (!isNaN(val)) setUserCreditLimit(val);
-            }
-            goToNext();
-          };
-        }
+      if (optNo1 && feedback) {
+        optNo1.onclick = (e) => {
+          e.preventDefault();
+          optNo1.className = 'opt opt-no-selected';
+          if (optYes) optYes.className = 'opt opt-dimmed';
+          if (optNo2) optNo2.className = 'opt opt-dimmed';
+          feedback.innerHTML = `
+            <div class="feedback-box" style="background:#E6F1FB; border:1.5px solid #0C447C; color:#0C447C;">
+              <p style="font-size:16px; font-weight:700; margin:0 0 4px;">💡 You should have one !!</p>
+              <p style="font-size:13px; margin:0; opacity:0.9;">A credit card is an essential tool to build your credit score safely without spending extra money.</p>
+            </div>
+          `;
+        };
       }
 
-      // General CTA buttons handler for all other slides and branch slides
-      const ctaBtn = wrapper.querySelector('button.cta, button') as HTMLButtonElement;
-      if (ctaBtn && (activeScreenIndex !== 10 || selectedBranch)) {
+      if (optNo2 && feedback) {
+        optNo2.onclick = (e) => {
+          e.preventDefault();
+          optNo2.className = 'opt opt-no-selected';
+          if (optYes) optYes.className = 'opt opt-dimmed';
+          if (optNo1) optNo1.className = 'opt opt-dimmed';
+          feedback.innerHTML = `
+            <div class="feedback-box" style="background:#E6F1FB; border:1.5px solid #0C447C; color:#0C447C;">
+              <p style="font-size:16px; font-weight:700; margin:0 0 4px;">💡 You should have one !!</p>
+              <p style="font-size:13px; margin:0; opacity:0.9;">A credit card is an essential tool to build your credit score safely without spending extra money.</p>
+            </div>
+          `;
+        };
+      }
+
+      // General CTA buttons handler for all other slides
+      const ctaBtn = wrapper.querySelector('button.cta') as HTMLButtonElement;
+      if (ctaBtn) {
         ctaBtn.onclick = (e) => {
           e.preventDefault();
           goToNext();
