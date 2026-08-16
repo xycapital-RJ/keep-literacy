@@ -379,15 +379,16 @@ function HtmlSlide({ html }: { html: string }) {
 
               var btnText = (btn.textContent || '').toLowerCase().trim();
 
-              // 1. Next / Continue / Audit Buttons
+              // 1. Next / Continue / Audit / Risk Buttons -> Navigate to next slide immediately
               if (
                 btn.classList.contains('i-3') ||
                 btn.classList.contains('seq3') ||
                 btn.classList.contains('seq4') ||
                 btnText.includes('next') ||
                 btnText.includes('continue') ||
-                btnText.includes('analyze my exposure') ||
-                btnText.includes('run my risk audit') ||
+                btnText.includes('analyze') ||
+                btnText.includes('audit') ||
+                btnText.includes('risk') ||
                 btnText.includes('let\'s find out') ||
                 btnText.includes('build defensive') ||
                 btnText.includes('patch the firewall') ||
@@ -501,7 +502,7 @@ function HtmlSlide({ html }: { html: string }) {
                 title.textContent = '⚖️ RENT VS. BUY';
                 resultVal.textContent = 'Rent: ₹' + rent.toLocaleString('en-IN') + ' vs EMI: ₹' + emi.toLocaleString('en-IN');
                 resultSub.textContent = 'Buying a ₹' + (home/100000).toLocaleString('en-IN') + 'L home requires ~₹' + ((home*0.2)/100000).toLocaleString('en-IN') + 'L upfront and an EMI of ~₹' + emi.toLocaleString('en-IN') + '/month for 20 years.';
-              } else if (btnText.includes('audit') || btnText.includes('exposure') || btnText.includes('shield') || btnText.includes('analyze')) {
+              } else if (btnText.includes('tranches') || btnText.includes('firewall gap')) {
                 title.textContent = '🛡️ RISK AUDIT RESULT';
                 resultVal.textContent = 'Personal Firewall Gap Detected';
                 resultSub.textContent = 'Relying only on employer insurance leaves you exposed when changing jobs. A personal health and term policy keeps your investment tranches safe.';
